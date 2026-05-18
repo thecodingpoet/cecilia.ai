@@ -1,6 +1,6 @@
 # Cecilia.AI
 
-**Cecilia.AI** is an intelligent shopping assistant that handles product inquiries and order processing through natural conversation. The system uses RAG (Retrieval-Augmented Generation) to answer product questions and guides customers through the entire purchase journey—from product discovery to order completion—using natural language dialogue.
+**Cecilia** is an intelligent shopping assistant that handles product inquiries and order processing through natural conversation. The system uses RAG (Retrieval-Augmented Generation) to answer product questions and guides customers through the entire purchase journey—from product discovery to order completion—using natural language dialogue.
 
 ## Table of Contents
 
