@@ -12,7 +12,7 @@ An intelligent AI chatbot for e-commerce that handles product inquiries and orde
 ## Features
 
 - **🤖 Conversational AI**: Natural language interface for product search and ordering
-- **🌐 Web UI**: Modern Gradio-based web interface with auto-scrolling chat window
+- **🌐 Web UI**: React chat interface with FastAPI backend
 - **💻 CLI Interface**: Command-line interface for terminal-based interactions
 - **🔍 Intelligent Product Search**: RAG-powered semantic search across product catalog using ChromaDB
 - **🛒 Seamless Order Processing**: Conversational checkout that collects customer details naturally through dialogue
@@ -99,24 +99,31 @@ To start the CLI conversational assistant:
 uv run src/main.py
 ```
 
-#### Web UI
+#### Web UI (Cecilia AI)
 
-<img width="1642" height="870" alt="Screenshot 2025-12-16 at 08 05 49" src="https://github.com/user-attachments/assets/4a5ed3ce-3a12-4b4f-b219-2729d352722c" />
-
-To launch the web-based interface:
+Custom React chat interface backed by FastAPI:
 
 ```bash
-uv run src/main.py --ui
+cd frontend && npm install && npm run build
+cd .. && uv run src/main.py --ui
 ```
 
-The web UI will:
-- Automatically open in your default browser
-- Run on `http://127.0.0.1:7860` by default
-- Provide a modern chat interface with auto-scrolling
+- Runs on `http://127.0.0.1:8000` by default
+- Use `--open` to open in your browser
 
-**Custom Port:**
+**Development** (hot reload):
 
-Run the web UI on a custom port:
+```bash
+# Terminal 1
+uv run src/main.py --ui --dev
+
+# Terminal 2
+cd frontend && npm run dev
+```
+
+Vite serves the UI at `http://localhost:5173` and proxies `/api` to port 8000.
+
+**Custom port:**
 
 ```bash
 uv run src/main.py --ui --port 8080
@@ -155,8 +162,10 @@ uv run src/main.py --verbose          # CLI with verbose logging
 uv run src/main.py -v                 # Short form for verbose
 
 # Web UI options
-uv run src/main.py --ui               # Run web UI on default port (7860)
-uv run src/main.py --ui --port 8080   # Run web UI on custom port
+uv run src/main.py --ui               # Web UI (port 8000)
+uv run src/main.py --ui --dev         # API only + Vite dev server
+uv run src/main.py --ui --port 8080   # Custom port
+uv run src/main.py --ui --open        # Open browser on start
 uv run src/main.py --ui --verbose     # Web UI with verbose logging
 ```
 
