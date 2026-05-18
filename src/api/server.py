@@ -37,7 +37,7 @@ def run_custom_ui(
             print(
                 "\nWarning: frontend not built. Run: cd frontend && npm install && npm run build\n"
             )
-        print(f"\nShop Assistant running at {url}")
+        print(f"\nCecilia AI running at {url}")
         print("Press Ctrl+C to stop the server\n")
 
     if open_browser and not dev_mode:

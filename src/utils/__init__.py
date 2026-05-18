@@ -1,1 +1,1 @@
-"""Utility functions and modules for the ecommerce-bot project."""
+"""Utility functions and modules for Cecilia AI."""

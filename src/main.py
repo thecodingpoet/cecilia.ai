@@ -1,5 +1,5 @@
 """
-E-commerce chatbot CLI and Web UI.
+Cecilia AI — CLI and web UI entry point.
 Interactive assistant for product search and order placement.
 """
 
@@ -40,7 +40,7 @@ def setup_logging(verbose: bool = False) -> logging.Logger:
 
 
 def run_cli(verbose: bool = False):
-    """Run CLI interface - E-commerce assistant with product search and ordering.
+    """Run CLI interface for Cecilia AI with product search and ordering.
 
     Args:
         verbose: Enable verbose output for debugging
@@ -53,9 +53,9 @@ def run_cli(verbose: bool = False):
             verbose: Whether verbose mode is enabled
         """
         print("\n" + "=" * 70)
-        print("🛍️  Welcome to Our E-Commerce Store!")
+        print("🛍️  Cecilia AI")
         print("=" * 70)
-        print("I'm your AI shopping assistant. I can help you:")
+        print("Hi, I'm Cecilia — your AI shopping assistant. I can help you:")
         print("  • Search and browse products")
         print("  • Get detailed product information")
         print("  • Place orders with ease")
@@ -121,7 +121,7 @@ def main(
     host: str = "127.0.0.1",
     open_browser: bool = False,
 ):
-    """Main entry point - E-commerce assistant with product search and ordering."""
+    """Main entry point for Cecilia AI."""
     if ui:
         logger = setup_logging(verbose)
         run_custom_ui(
@@ -138,7 +138,7 @@ def main(
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description="E-commerce chatbot CLI and Web UI",
+        description="Cecilia AI — CLI and web UI",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
         Examples:

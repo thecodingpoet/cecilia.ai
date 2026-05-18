@@ -1,50 +1,73 @@
-# E-Commerce AI Chatbot
+# Cecilia AI
 
-An intelligent AI chatbot for e-commerce that handles product inquiries and order processing through natural conversation. The system uses RAG (Retrieval-Augmented Generation) to answer product questions and employs conversational AI to guide customers through the entire purchase journey - from product discovery to order completion - using only natural language dialogue.
+**Cecilia AI** is an intelligent shopping assistant that handles product inquiries and order processing through natural conversation. The system uses RAG (Retrieval-Augmented Generation) to answer product questions and guides customers through the entire purchase journey—from product discovery to order completion—using natural language dialogue.
 
 ## Table of Contents
 
 - [Features](#features)
 - [Architecture](#architecture)
+- [Project Structure](#project-structure)
 - [Setup](#setup)
 - [Usage](#usage)
+- [Testing](#testing)
+- [Limitations](#limitations)
 
 ## Features
 
 - **🤖 Conversational AI**: Natural language interface for product search and ordering
-- **🌐 Web UI**: React chat interface with FastAPI backend
-- **💻 CLI Interface**: Command-line interface for terminal-based interactions
-- **🔍 Intelligent Product Search**: RAG-powered semantic search across product catalog using ChromaDB
-- **🛒 Seamless Order Processing**: Conversational checkout that collects customer details naturally through dialogue
-- **🧠 Multi-Agent Architecture**: Specialized agents (Orchestrator, RAG, Order) working in concert
-- **💬 Stateful Conversations**: Maintains context across multiple turns for coherent interactions
-- **📦 Order Management**: Complete order lifecycle from placement to database persistence
-- **🎯 Smart Intent Detection**: Automatically routes queries to appropriate specialist agents
-- **🔄 Dynamic Mode Switching**: Seamlessly transitions between product search and order modes
-- **💾 Dual Storage System**: 
+- **🌐 Web UI**: React + TypeScript chat interface with orders view
+- **⚡ FastAPI backend**: REST API with per-session conversation isolation
+- **💻 CLI Interface**: Terminal-based interactions for scripting and debugging
+- **🔍 Intelligent Product Search**: RAG-powered hybrid search (exact match + ChromaDB semantic)
+- **🛒 Seamless Order Processing**: Conversational checkout that collects customer details through dialogue
+- **🧠 Multi-Agent Architecture**: Orchestrator, RAG, and Order agents working in concert
+- **💬 Stateful Conversations**: Context preserved per session across multiple turns
+- **📦 Order Management**: Order lifecycle from placement to SQLite persistence
+- **🎯 Smart Intent Detection**: Routes queries to the appropriate specialist agent
+- **🔄 Dynamic Mode Switching**: Transitions between product search and checkout modes
+- **💾 Dual Storage System**:
   - Vector embeddings in ChromaDB for semantic search
   - Relational data in SQLite for orders and transactions
-- **🛠️ Admin Console**: Interactive development shell for data inspection and maintenance
+- **🛠️ Admin Console**: Interactive Python shell for data inspection and maintenance
 
 ## Architecture
 
-The application follows a modular multi-agent architecture powered by LangChain. It uses an Orchestrator to route queries to specialized RAG and Order agents.
+The system has three layers:
 
-For a detailed deep-dive into the system design, components, and data flow, please see the [Architecture Documentation](docs/architecture.md).
+1. **Presentation** — CLI (`src/main.py`) or React SPA (`frontend/`) backed by FastAPI (`src/api/`)
+2. **Agents** — LangChain orchestrator with RAG and Order specialist agents (`src/agents/`)
+3. **Data** — ChromaDB for product search, SQLite for orders (`src/database/`)
+
+The web UI sends `session_id` with each request. The server maintains a separate orchestrator, chat history, and shopping cart per session via `SessionStore`.
+
+For diagrams, API routes, session model, and agent internals, see [Architecture Documentation](docs/architecture.md).
+
+## Project Structure
+
+```
+ecommerce-bot/
+├── frontend/          # React UI (Vite + TypeScript + Tailwind)
+├── src/
+│   ├── agents/        # Orchestrator, RAG, Order agents
+│   ├── api/           # FastAPI routes and session store
+│   ├── database/      # Products, orders, vector store
+│   ├── ui/            # Chat service adapter for the API
+│   └── main.py        # CLI and --ui entry point
+├── data/              # products.json, ecommerce.db, chroma/
+├── docs/              # architecture.md
+└── examples/          # Manual test conversation scripts
+```
 
 ## Setup
 
 ### Prerequisites
 
-Before getting started, ensure you have the following installed:
-
 - **Python 3.12 or higher**
+- **Node.js 18+** (for the web UI)
 - **[uv](https://github.com/astral-sh/uv)** (recommended) or `pip`
-- **OpenAI API Key** - [Get one here](https://platform.openai.com/api-keys)
+- **OpenAI API Key** — [Get one here](https://platform.openai.com/api-keys)
 
 ### Installation
-
-Follow these steps to set up the application:
 
 #### 1. Clone the Repository
 
@@ -55,21 +78,25 @@ cd ecommerce-bot
 
 #### 2. Install Dependencies
 
-Using `uv`:
+Python (backend):
 
 ```bash
 uv sync
 ```
 
-#### 3. Configure Environment
+Frontend (web UI):
 
-Copy the example environment file:
+```bash
+cd frontend && npm install && cd ..
+```
+
+#### 3. Configure Environment
 
 ```bash
 cp .env.example .env
 ```
 
-Open `.env` and add your OpenAI API Key:
+Add your OpenAI API key to `.env`:
 
 ```
 OPENAI_API_KEY=sk-...
@@ -77,7 +104,7 @@ OPENAI_API_KEY=sk-...
 
 #### 4. Initialize Data
 
-Populate the vector store with the initial product catalog:
+Populate the vector store with the product catalog:
 
 ```bash
 uv run src/initialize_vector_store.py
@@ -85,43 +112,40 @@ uv run src/initialize_vector_store.py
 
 ## Usage
 
-### Running the Chat Interface
+The application supports a **CLI** and a **Web UI**.
 
-The application supports both CLI and Web UI interfaces:
+### Command-Line Interface (CLI)
 
-#### Command-Line Interface (CLI)
 <img width="892" height="629" alt="Screenshot 2025-12-16 at 08 12 08" src="https://github.com/user-attachments/assets/a55c40e3-f498-44af-a3b6-86708052d170" />
-
-
-To start the CLI conversational assistant:
 
 ```bash
 uv run src/main.py
 ```
 
-#### Web UI (Cecilia AI)
+### Web UI
 
-Custom React chat interface backed by FastAPI:
+Build the frontend and start the server:
 
 ```bash
-cd frontend && npm install && npm run build
-cd .. && uv run src/main.py --ui
+cd frontend && npm run build && cd ..
+uv run src/main.py --ui
 ```
 
-- Runs on `http://127.0.0.1:8000` by default
-- Use `--open` to open in your browser
+- App: `http://127.0.0.1:8000` (default)
+- Add `--open` to launch the browser
 
 **Development** (hot reload):
 
 ```bash
-# Terminal 1
+# Terminal 1 — API
 uv run src/main.py --ui --dev
 
-# Terminal 2
+# Terminal 2 — Vite dev server
 cd frontend && npm run dev
 ```
 
-Vite serves the UI at `http://localhost:5173` and proxies `/api` to port 8000.
+- UI: `http://localhost:5173` (proxies `/api` → port 8000)
+- API: `http://127.0.0.1:8000`
 
 **Custom port:**
 
@@ -129,78 +153,58 @@ Vite serves the UI at `http://localhost:5173` and proxies `/api` to port 8000.
 uv run src/main.py --ui --port 8080
 ```
 
-#### Verbose Mode
+### Verbose Mode
 
-Enable verbose mode for debugging and detailed logging (works with both CLI and UI):
+Works with CLI and web UI:
 
 ```bash
-# CLI with verbose
 uv run src/main.py --verbose
-
-# Web UI with verbose
 uv run src/main.py --ui --verbose
-# or use short form
 uv run src/main.py --ui -v
 ```
 
-Verbose mode provides:
-- DEBUG level logging for all components
-- Order mode state tracking
-- Chat history length monitoring
-- Full error tracebacks
-- Agent decision visibility
+Verbose mode enables DEBUG logging, orchestrator state traces, chat history length, full tracebacks, and agent decision visibility.
 
-#### Command-Line Options
+### Command-Line Options
 
 ```bash
-# Show help
 uv run src/main.py --help
 
-# CLI options
-uv run src/main.py                    # Run CLI (default)
-uv run src/main.py --verbose          # CLI with verbose logging
-uv run src/main.py -v                 # Short form for verbose
+# CLI
+uv run src/main.py
+uv run src/main.py --verbose
 
-# Web UI options
-uv run src/main.py --ui               # Web UI (port 8000)
-uv run src/main.py --ui --dev         # API only + Vite dev server
-uv run src/main.py --ui --port 8080   # Custom port
-uv run src/main.py --ui --open        # Open browser on start
-uv run src/main.py --ui --verbose     # Web UI with verbose logging
+# Web UI
+uv run src/main.py --ui
+uv run src/main.py --ui --dev
+uv run src/main.py --ui --port 8080
+uv run src/main.py --ui --open
+uv run src/main.py --ui --verbose
 ```
 
 ### Developer Console
 
 <img width="947" height="829" alt="Screenshot 2025-12-16 at 08 16 46" src="https://github.com/user-attachments/assets/94289124-4a7c-4b49-873c-1908278d202e" />
 
-
-To access the interactive developer console for debugging and testing:
-
 ```bash
 uv run src/console.py
 ```
 
-This opens an interactive Python shell with pre-initialized objects:
+Pre-initialized objects:
 
-- **`products`**: Instance of `ProductCatalog` for managing product data.
-  - Usage: `products.get_product("TECH-001")`, `products.get_all_products()`
-- **`orders`**: Instance of `OrderDatabase` for managing order records.
-  - Usage: `orders.get_last_order()`, `orders.get_order_count()`
-
-Use this console for deep inspection of the database, manual testing of data retrieval, and debugging order states.
+- **`products`**: `ProductCatalog` — e.g. `products.get_product("TECH-001")`
+- **`orders`**: `OrderDatabase` — e.g. `orders.get_last_order()`, `orders.get_order_count()`
 
 ## Testing
 
-For manual testing scenarios and expected conversation flows, see the [Conversation Test Guide](examples/test_conversations.md).
-This guide covers:
-- Product price queries
-- Multi-turn discussions
-- Order confirmation flows
-- Ambiguous query handling
-- Edge cases and error handling
+Manual test scenarios and expected conversation flows: [Conversation Test Guide](examples/test_conversations.md).
+
+Covers product queries, multi-turn flows, order confirmation, ambiguous queries, and edge cases.
 
 ## Limitations
 
-- **Single User Web UI**: The current Web UI implementation shares state (conversation history and shopping cart) across all connected users. It is designed for local, single-user testing only. For multi-user deployments, session management logic would need to be added.
-- **In-Memory Shopping Cart**: Shopping cart data is stored in memory and will be lost if the application is restarted.
-- **No Payment Processing**: The application simulates the checkout process and does not integrate with real payment gateways or shipping providers.
+- **In-memory sessions**: Chat history, orchestrator state, and carts live in server memory. A restart clears active sessions (orders in SQLite remain).
+- **Session cap**: Up to 100 concurrent server sessions; oldest sessions are evicted when the limit is reached.
+- **In-memory shopping cart**: Cart data is per-session and not persisted to disk.
+- **No payment processing**: Checkout is simulated; no real payment or shipping integrations.
+- **Local/demo scope**: Designed for development and demos—not hardened for production deployment without auth, rate limiting, and persistent session storage.

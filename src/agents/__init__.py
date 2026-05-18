@@ -1,1 +1,1 @@
-""" Agent modules for the ecommerce-bot project. """
+"""Agent modules for Cecilia AI."""

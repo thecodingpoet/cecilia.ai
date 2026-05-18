@@ -1,8 +1,8 @@
-"""Chat adapter between UI and orchestrator.
+"""Chat adapter between the HTTP API and orchestrator.
 
-Future custom frontends can mirror this contract:
-  POST /api/chat       { "message": str, "session_id": str } -> { "reply": str }
-  POST /api/session/reset { "session_id": str } -> 204
+Used by SessionStore; the React client calls:
+  POST /api/chat            { "message", "session_id" } -> { "reply" }
+  POST /api/session/reset   { "session_id" } -> 204
 """
 
 import logging

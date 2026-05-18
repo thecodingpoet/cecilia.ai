@@ -2,241 +2,283 @@
 
 ## 1. High-Level Overview
 
-The `ecommerce-bot` is a Python-based conversational AI application designed to handle product inquiries and order processing. It employs a **Multi-Agent Architecture** orchestrated by LangChain and powered by OpenAI's GPT models.
+**Cecilia AI** is a conversational shopping assistant for product inquiries and order processing. It uses a **multi-agent backend** (LangChain + OpenAI) with two user-facing surfaces:
+
+| Surface | Stack | Entry point |
+|---------|-------|-------------|
+| **CLI** | Python | `uv run src/main.py` |
+| **Web UI** | React + TypeScript (Vite) → FastAPI → agents | `uv run src/main.py --ui` |
+
+The web UI is the primary interface: a React SPA talks to a FastAPI server, which routes each browser tab to an isolated chat session backed by the same orchestrator and agents used by the CLI.
 
 ### Core Technologies
--   **Language:** Python 3.12+
--   **Orchestration:** LangChain
--   **LLM:** OpenAI (GPT-4o-mini)
--   **Vector Database:** ChromaDB (Local)
--   **Relational Database:** SQLite (via SQLAlchemy)
--   **Dependency Management:** `uv`
 
-## 2. Architecture Diagram
+**Backend**
+- **Language:** Python 3.12+
+- **Orchestration:** LangChain
+- **LLM:** OpenAI (GPT-4o-mini)
+- **API:** FastAPI + Uvicorn
+- **Vector database:** ChromaDB (local)
+- **Relational database:** SQLite (via SQLAlchemy)
+- **Dependency management:** `uv`
+
+**Frontend**
+- **Framework:** React 19 + TypeScript
+- **Build / dev:** Vite
+- **Routing:** React Router
+- **Styling:** Tailwind CSS v4
+
+## 2. System Architecture
 
 ```mermaid
-flowchart TD
-    User([User]) --> CLI[CLI / Web UI]
-    CLI --> Orchestrator[Orchestrator]
-    
-    Orchestrator -->|Product Queries| RAG[RAG Agent]
-    Orchestrator -->|Purchase Intent| Order[Order Agent]
-    
-    RAG --> VectorDB[(ChromaDB)]
-    Order --> SQLDB[(SQLite)]
-    Order --> Catalog[Product Catalog]
-    
-    Orchestrator -.->|LLM Routing| OpenAI[OpenAI]
-    RAG -.->|Embeddings| OpenAI
-    Order -.->|LLM| OpenAI
-    
-    style Orchestrator fill:#4A90E2,stroke:#2E5C8A,stroke-width:3px,color:#fff
+flowchart TB
+    subgraph clients [Clients]
+        CLI[CLI<br/>main.py]
+        Browser[Browser<br/>React SPA]
+    end
+
+    subgraph presentation [Presentation]
+        Main[main.py]
+        API[FastAPI<br/>src/api/]
+        Static[Static files<br/>frontend/dist]
+    end
+
+    subgraph session [Session layer]
+        Store[SessionStore]
+        ChatSvc[OrchestratorChatService<br/>per session_id]
+    end
+
+    subgraph agents [Agent layer]
+        Orch[Orchestrator]
+        RAG[RAG Agent]
+        Order[Order Agent]
+    end
+
+    subgraph data [Data layer]
+        Chroma[(ChromaDB)]
+        SQLite[(SQLite)]
+        Catalog[Product Catalog]
+    end
+
+    OpenAI[OpenAI API]
+
+    CLI --> Main
+    Browser -->|"/api/*" REST| API
+    Browser -->|production: same origin| Static
+    Main -->|CLI path| Orch
+    Main -->|"--ui"| API
+    API --> Store
+    Store --> ChatSvc
+    ChatSvc --> Orch
+    API --> Static
+
+    Orch --> RAG
+    Orch --> Order
+    RAG --> Chroma
+    RAG --> Catalog
+    Order --> SQLite
+    Order --> Catalog
+
+    Orch -.-> OpenAI
+    RAG -.-> OpenAI
+    Order -.-> OpenAI
+
+    style Orch fill:#4A90E2,stroke:#2E5C8A,stroke-width:3px,color:#fff
     style RAG fill:#50C878,stroke:#2E7A4A,stroke-width:2px,color:#fff
     style Order fill:#E24A90,stroke:#8A2E5C,stroke-width:2px,color:#fff
-    style VectorDB fill:#8B6FAE,stroke:#6B4F8E,stroke-width:2px,color:#fff
-    style SQLDB fill:#8B6FAE,stroke:#6B4F8E,stroke-width:2px,color:#fff
-    style Catalog fill:#8B6FAE,stroke:#6B4F8E,stroke-width:2px,color:#fff
-    style OpenAI fill:#10A37F,stroke:#0A7A5F,stroke-width:2px,color:#fff
+    style API fill:#7B68EE,stroke:#5A4AB8,stroke-width:2px,color:#fff
+    style Browser fill:#61DAFB,stroke:#3A8BB8,stroke-width:2px,color:#000
 ```
 
-## 3. Component Architecture
+## 3. Project Structure
+
+```
+ecommerce-bot/
+├── frontend/                 # React SPA (Cecilia AI UI)
+│   ├── src/
+│   │   ├── api/              # fetch wrappers for /api/*
+│   │   ├── components/       # chat, orders, layout
+│   │   ├── hooks/            # useChat, useOrders
+│   │   └── pages/            # ChatPage, OrdersPage
+│   └── dist/                 # production build (served by FastAPI)
+├── src/
+│   ├── agents/               # Orchestrator, RAG, Order agents
+│   ├── api/                  # FastAPI app, schemas, SessionStore
+│   ├── database/             # products, orders, ChromaDB
+│   ├── ui/                   # OrchestratorChatService (API adapter)
+│   └── main.py               # CLI + --ui entry point
+├── data/                     # products.json, ecommerce.db, chroma/
+└── docs/
+    └── architecture.md
+```
+
+## 4. Presentation Layer
+
+### A. CLI (`src/main.py`)
+
+The CLI runs the orchestrator in-process with a single in-memory chat history list. There is no HTTP layer and no session IDs—one terminal session equals one conversation.
+
+### B. Web UI
+
+**Production** (`uv run src/main.py --ui`):
+
+1. Uvicorn serves FastAPI on port 8000 (default).
+2. Built assets from `frontend/dist` are mounted at `/` (SPA fallback).
+3. API routes live under `/api/*` on the same origin.
+
+**Development** (`uv run src/main.py --ui --dev`):
+
+1. FastAPI runs API-only with CORS for `localhost:5173`.
+2. Vite dev server (`cd frontend && npm run dev`) serves the UI and proxies `/api` to port 8000.
+
+**Frontend routes**
+
+| Path | Page | Purpose |
+|------|------|---------|
+| `/` | `ChatPage` | Chat with Cecilia AI |
+| `/orders` | `OrdersPage` | List orders from `GET /api/orders` |
+
+**Session identity**
+
+- The browser generates a UUID and stores it in `localStorage` (`cecilia-session-id`).
+- Every chat request includes `session_id` so the server can isolate history, orchestrator state, and cart per tab/user.
+
+### C. HTTP API (`src/api/`)
+
+| Method | Path | Description |
+|--------|------|-------------|
+| `GET` | `/api/health` | Health check |
+| `POST` | `/api/chat` | `{ session_id, message }` → `{ reply }` |
+| `POST` | `/api/session/reset` | Clear server-side session (204) |
+| `GET` | `/api/orders` | Recent orders for the orders page |
+
+`OrchestratorChatService` (`src/ui/chat_service.py`) wraps one `Orchestrator` instance and chat history per session. `SessionStore` maps `session_id` → service, with a cap of 100 sessions (oldest evicted).
+
+## 5. Agent Architecture
 
 ### A. The Orchestrator (`src/agents/orchestrator.py`)
-The central brain of the system. It acts as a router, directing user intents to specialized agents.
--   **Routing Logic:** Uses an LLM classifier to determine if a query is about "product search" or "placing an order".
--   **State Management:** Uses an enum-based state machine (`OrchestratorState`) to manage conversation flow:
-    -   `INTENT`: Default state, routes queries to appropriate agent based on intent classification
-    -   `CHECKOUT`: Locks the conversation to the Order Agent during an active transaction, preventing context switching until the order is complete or explicitly transferred
-    -   State transitions are handled via `should_exit_checkout_mode()` which evaluates OrderAgent responses to determine when to return to `INTENT` state
--   **Cart Management:** Maintains an in-memory shopping cart (`self._cart`) as a list of cart items. The cart persists during the conversation session and is cleared after successful order creation. Cart items contain: `product_id`, `product_name`, `quantity`, `unit_price`.
+
+The central router directing user intents to specialized agents.
+
+- **Routing logic:** LLM classifier for "product search" vs "placing an order".
+- **State management:** Enum-based state machine (`OrchestratorState`):
+    - `INTENT`: Default; routes by intent classification.
+    - `CHECKOUT`: Locked to Order Agent until checkout completes, fails, or transfers.
+    - Transitions via `should_exit_checkout_mode()` on Order Agent responses.
+- **Cart management:** In-memory `self._cart` per orchestrator instance (therefore per web session). Cleared after successful order creation.
 
 ### B. Specialized Agents
-1.  **RAG Agent (`src/agents/rag_agent.py`)**
-    -   **Purpose:** Answers questions about products.
-    -   **Mechanism:** Uses Retrieval-Augmented Generation (RAG) with **hybrid search**:
-        -   **Exact Match First:** Attempts exact matching by product ID or exact product name (case-insensitive)
-        -   **Semantic Fallback:** If no exact match, performs semantic similarity search using ChromaDB vector embeddings
-        -   This hybrid approach ensures precise results for known products while maintaining flexibility for natural language queries
-    -   **Tools:** `retrieve_products`, `transfer_to_order_agent`.
 
-2.  **Order Agent (`src/agents/order_agent.py`)**
-    -   **Purpose:** Handles the checkout process.
-    -   **Mechanism:** A stateful agent that collects user details, validates stock, and creates orders.
-    -   **Tools:** `add_to_cart`, `remove_from_cart`, `view_cart`, `create_order`, `transfer_to_rag_agent`.
-    -   **Cart Management:** Uses an in-memory cart (stored in Orchestrator) to track items before checkout.
-    -   **Protocol:** Uses structured outputs (`OrderResponse`) to communicate status (`collecting_info`, `confirming`, `completed`) back to the orchestrator.
+1. **RAG Agent (`src/agents/rag_agent.py`)**
+    - **Purpose:** Answers questions about products.
+    - **Mechanism:** Hybrid search—exact match by ID/name first, then ChromaDB semantic search.
+    - **Tools:** `retrieve_products`, `transfer_to_order_agent`.
+
+2. **Order Agent (`src/agents/order_agent.py`)**
+    - **Purpose:** Checkout flow.
+    - **Mechanism:** Collects customer details, validates stock, creates orders.
+    - **Tools:** `add_to_cart`, `remove_from_cart`, `view_cart`, `create_order`, `transfer_to_rag_agent`.
+    - **Protocol:** Structured `OrderResponse` statuses (`collecting_info`, `confirming`, `completed`).
 
 ### Middleware Configuration
 
-All agents use LangChain middleware to control LLM and tool call behavior, preventing infinite loops and excessive API costs:
+All agents use LangChain middleware to cap LLM and tool calls:
 
-1.  **Orchestrator Agent**
-    -   **`ModelCallLimitMiddleware`**: Limits total LLM calls to **3** per invocation
-        -   Prevents excessive routing attempts when intent is unclear
-        -   Exit behavior: `"end"` (gracefully terminates after limit)
-
-2.  **RAG Agent**
-    -   **`ModelCallLimitMiddleware`**: Limits total LLM calls to **5** per invocation
-        -   Allows multiple product searches and comparisons within a single query
-        -   Exit behavior: `"end"` (gracefully terminates after limit)
-
-3.  **Order Agent**
-    -   **`ModelCallLimitMiddleware`**: Limits total LLM calls to **10** per invocation
-        -   Higher limit to accommodate multi-turn conversations (collecting customer info, confirmations)
-        -   Exit behavior: `"end"` (gracefully terminates after limit)
-    -   **`ToolCallLimitMiddleware`** (per-tool limits):
-        -   **`create_order`**: **1 call** per invocation (prevents duplicate orders)
-        -   **`view_cart`**: **2 calls** per invocation (allows cart checks during checkout)
-        -   **`add_to_cart`**: **3 calls** per invocation (allows adding multiple items)
-
-**Why Middleware?**
--   **Cost Control:** Prevents runaway LLM API calls that could result in unexpected charges
--   **Reliability:** Stops infinite loops when agents get stuck in repetitive behavior
--   **User Experience:** Ensures responses are returned even if agents exceed reasonable iteration limits
--   **Tool Safety:** Prevents critical operations (like `create_order`) from being called multiple times accidentally
+| Agent | Model calls | Tool limits (notable) |
+|-------|-------------|------------------------|
+| Orchestrator | 3 | — |
+| RAG | 5 | — |
+| Order | 10 | `create_order`: 1; `view_cart`: 2; `add_to_cart`: 3 |
 
 ### Chat History Strategy
 
-The agents have different requirements for conversation history, which affects how the Orchestrator passes context during agent handovers:
-
-| Agent | Needs History? | Reason |
+| Agent | Needs history? | Reason |
 |-------|----------------|--------|
-| **RAG Agent** | ❌ No | Stateless product search. Each query is independent—the agent only needs the current search query to find products. |
-| **Order Agent** | ✅ Yes | Stateful multi-turn conversation. Requires history to: (1) find product IDs from previous listings, (2) collect customer info across turns, (3) understand follow-up responses like "yes", "2", or addresses. |
+| RAG | No | Stateless search per query |
+| Order | Yes | Multi-turn checkout, product IDs from prior turns |
 
-**Implementation:**
--   When routing to **Order Agent**: Truncated `chat_history` is passed to maintain conversational context.
--   When transferring from Order → **RAG Agent**: Empty `chat_history=[]` is passed to avoid LLM timeouts caused by processing large contexts with verbose product listings. The RAG agent only needs the search query.
-
-This design prevents timeout issues during agent handovers while ensuring each agent has the context it needs.
+- Order Agent receives truncated history from the orchestrator.
+- Order → RAG transfer passes `chat_history=[]` to avoid timeouts on large product listings.
 
 ### History Truncation
 
-To prevent LLM timeouts as conversations grow, the Orchestrator truncates chat history to the most recent N messages (default: 10) before passing it to agents.
+The orchestrator keeps the last **10** messages when passing history to agents (zero extra LLM cost vs summarization; recent context matters most for shopping conversations).
 
-**Why Truncation Over Summarization?**
+## 6. Data Layer
 
-| Aspect | Truncation (Used) | Summarization (Alternative) |
-|--------|-------------------|----------------------------|
-| **Latency** | ✅ Zero overhead | ❌ Extra LLM call per turn |
-| **Cost** | ✅ No additional tokens | ❌ Tokens spent on summarization |
-| **Accuracy** | ✅ No risk of losing details | ❌ LLM might drop product IDs |
-| **Complexity** | ✅ Simple implementation | ❌ Requires tuning, prompt engineering |
+1. **Product Catalog (`src/database/products.py`)**
+    - Source: `data/products.json`
+    - Exact lookup + ChromaDB embeddings for hybrid RAG search
 
-**Why Truncation Works for E-commerce:**
--   **Recent context matters most** — Users care about products they just viewed, not from 20 messages ago
--   **Product IDs preserved** — The `_append_product_details()` method adds product IDs to each response, so recent messages contain the IDs needed for ordering
--   **Low latency critical** — Shoppers expect fast responses; extra LLM calls for summarization add unacceptable delay
--   **Summarization risk** — An LLM might drop a product ID during summarization, breaking the order flow
+2. **Order Management (`src/database/orders.py`)**
+    - SQLite: `data/ecommerce.db`
+    - SQLAlchemy models: `Order`, `OrderItem`
 
-### C. Data Layer
-1.  **Product Catalog (`src/database/products.py`)**
-    -   **Source:** `data/products.json`.
-    -   **Exact Matching:** Provides exact product lookup by ID or name for precise queries.
-    -   **Vector Store:** Manages embeddings in ChromaDB for semantic similarity search.
-    -   **Hybrid Search:** The RAG agent combines both approaches - exact matching for known products, semantic search for natural language queries.
-2.  **Order Management (`src/database/orders.py`)**
-    -   **Storage:** SQLite database (`data/ecommerce.db`).
-    -   **ORM:** SQLAlchemy models for `Order` and `OrderItem`.
+## 7. Data Flow
 
-## 4. Data Flow
+### CLI path
 
-1.  **User Input** enters via `main.py` (CLI or Web UI).
-2.  **main.py** passes input directly to `Orchestrator`.
-3.  **Orchestrator** evaluates current state:
-    -   **If state is `CHECKOUT`**: Routes directly to **Order Agent** (bypasses intent classification).
-    -   **If state is `INTENT`**: Uses LLM classifier to determine intent:
-        -   *Product Intent* -> **RAG Agent** -> Hybrid Search (exact match first, then semantic) -> Response.
-        -   *Purchase Intent* -> **Order Agent** -> Sets state to `CHECKOUT` -> Cart operations -> Response.
-4.  **Order Agent** processes purchase requests:
-    -   Uses `add_to_cart` to validate and store items in Orchestrator's cart
-    -   Uses `view_cart` to show cart contents when requested
-    -   Collects customer information (name, email, address)
-    -   Uses `create_order` which reads from cart and clears it after success
-5.  **Agents** return structured responses with status information.
-6.  **Orchestrator** processes responses and updates state:
-    -   Evaluates `OrderAgent` status via `should_exit_checkout_mode()`:
-        -   Order completed/failed → Transition to `INTENT` (cart cleared on success)
-        -   Transfer request to RAG → Transition to `INTENT` (cart preserved)
-        -   Otherwise → Remain in `CHECKOUT`
-7.  **Orchestrator** formats and returns final response to user.
+1. User input in `main.py` → `Orchestrator.invoke()` with local `chat_history`.
+2. Orchestrator routes to RAG or Order agent.
+3. Response printed to terminal; history appended in-process.
 
-## 5. State Management Details
+### Web UI path
 
-The orchestrator uses a simple enum-based state machine for conversation flow control:
+1. User sends message from React → `POST /api/chat`.
+2. FastAPI resolves `session_id` via `SessionStore.get()`.
+3. `OrchestratorChatService.send()` calls `Orchestrator.invoke()` and persists history server-side.
+4. Reply returned as JSON; UI renders in `ChatThread`.
+5. "New chat" → `POST /api/session/reset` clears history and orchestrator state for that session.
+
+### Orchestrator routing (both paths)
+
+1. If state is `CHECKOUT` → Order Agent directly.
+2. If state is `INTENT` → classify intent:
+   - Product → RAG Agent → hybrid search → response.
+   - Purchase → Order Agent → `CHECKOUT` → cart tools → response.
+3. Order Agent may `create_order` (reads cart, clears on success).
+4. Orchestrator updates state via `should_exit_checkout_mode()`.
+5. Formatted response returned to CLI or API client.
+
+## 8. State Management (Orchestrator)
 
 ```python
 class OrchestratorState(str, Enum):
-    INTENT = "intent"           # Default: routes based on intent
-    CHECKOUT = "checkout"  # Locked: direct to Order Agent
+    INTENT = "intent"
+    CHECKOUT = "checkout"
 ```
-
-**State Transition Diagram:**
 
 ```mermaid
 flowchart TD
-    INTENT[INTENT<br/>Intent-based routing] -->|Purchase Intent| CHECKOUT[CHECKOUT<br/>Direct to Order Agent]
-    CHECKOUT -->|Order completed<br/>Order failed<br/>Transfer requested| INTENT
-    
+    INTENT[INTENT<br/>Intent-based routing] -->|Purchase intent| CHECKOUT[CHECKOUT<br/>Order Agent only]
+    CHECKOUT -->|Order completed / failed / transfer| INTENT
+
     style INTENT fill:#4A90E2,stroke:#2E5C8A,stroke-width:2px,color:#fff
     style CHECKOUT fill:#E24A90,stroke:#8A2E5C,stroke-width:2px,color:#fff
 ```
 
-**State Transitions:**
--   `INTENT` → `CHECKOUT`: When user expresses purchase intent
--   `CHECKOUT` → `INTENT`: When order completes, fails, or user requests transfer to search
+## 9. Cart Architecture
 
-**Benefits:**
--   Type-safe state management (enum prevents invalid states)
--   Clear state transitions with centralized logic
--   Better debugging (explicit state names in logs)
--   Easy to extend with additional states if needed
+The cart lives on each `Orchestrator` instance (`self._cart`):
 
-## 6. Cart Architecture & Tradeoffs
+- **Web:** One cart per `session_id` (isolated orchestrator per session).
+- **CLI:** One cart per terminal session.
+- **Lifecycle:** Persists for the conversation; cleared when `create_order` succeeds.
+- **Structure:** `{ product_id, product_name, quantity, unit_price }[]`
 
-### Cart Implementation
+**Why in-memory cart (not history-only)?**
 
-The system uses an **in-memory cart** stored in the Orchestrator (`self._cart`). This cart is:
--   **Session-scoped:** Persists during the conversation, cleared when order completes
--   **Simple structure:** List of dictionaries with `product_id`, `product_name`, `quantity`, `unit_price`
--   **Shared with Order Agent:** Cart reference is passed to Order Agent, allowing direct manipulation
+- Reliable quantities and line items across turns
+- Explicit `view_cart` / `remove_from_cart` UX
+- `create_order` reads the cart directly instead of parsing LLM memory
 
-### Cart Tools
+**Tradeoff:** Cart and session state are lost on server restart (acceptable for local/demo use).
 
-The Order Agent provides four cart-related tools:
+## 10. Operational Notes
 
-1.  **`add_to_cart(product_id, quantity)`**
-    -   Validates product (existence, availability, stock)
-    -   Adds item to cart or updates quantity if already present
-    -   Returns success message or validation error
-
-2.  **`remove_from_cart(product_id)`**
-    -   Removes an item from the cart
-    -   Returns confirmation message or error if item not found
-
-3.  **`view_cart()`**
-    -   Displays current cart contents
-    -   Shows items, quantities, prices, and total
-    -   Returns formatted cart summary
-
-4.  **`create_order(customer_name, email, shipping_address)`**
-    -   Reads items directly from cart (no items parameter needed)
-    -   Validates all items are still available
-    -   Creates order in database
-    -   Clears cart after successful creation
-
-### Architecture Tradeoffs: In-Memory Cart vs. History-Based
-
-The in-memory cart approach was chosen over relying on LLM conversation history for these reasons:
-
-**Key Benefits:**
--   **Reliability:** Prevents LLM from forgetting items or getting quantities wrong when handling multiple products
--   **Simpler order creation:** Direct read from cart instead of reconstructing items from conversation history
--   **Better UX:** Users can explicitly view their cart (`view_cart`) and remove items (`remove_from_cart`)
--   **Easier debugging:** Cart state is inspectable, making issues easier to diagnose
-
-**Tradeoffs:**
--   **Session-only:** Cart is lost when conversation ends (acceptable for single-session purchases)
--   **Slightly more code:** Requires cart management tools, but adds minimal complexity
-
-The history-based approach was not chosen because LLM memory is unreliable for tracking multiple cart items, and reconstructing the cart from conversation history for `create_order` is error-prone.
+| Topic | Behavior |
+|-------|----------|
+| **Multi-user (web)** | Supported via `session_id`; each browser profile/tab with its own ID gets isolated orchestrator + cart |
+| **Session eviction** | After 100 active sessions, oldest session is dropped from memory |
+| **Persistence** | Orders persist in SQLite; chat/cart/orchestrator state do not |
+| **Payments** | Simulated only—no payment gateway integration |

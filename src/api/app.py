@@ -22,7 +22,7 @@ def create_api_app(
     dev_mode: bool = False,
 ) -> FastAPI:
     """Create FastAPI app with API routes and optional static SPA mount."""
-    app = FastAPI(title="Shop Assistant API")
+    app = FastAPI(title="Cecilia AI API")
 
     if dev_mode:
         app.add_middleware(

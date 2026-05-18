@@ -1,4 +1,4 @@
-"""Interactive console for the e-commerce chatbot."""
+"""Interactive developer console for Cecilia AI."""
 
 from database import OrderDatabase, ProductCatalog
 
@@ -7,7 +7,7 @@ products = ProductCatalog()
 
 banner = """
 ╔════════════════════════════════════════════════════════════╗
-║          E-Commerce Chatbot Interactive Console            ║
+║              Cecilia AI — Developer Console                ║
 ╚════════════════════════════════════════════════════════════╝
 
 Available objects:
