@@ -31,63 +31,98 @@ The web UI is the primary interface: a React SPA talks to a FastAPI server, whic
 ## 2. System Architecture
 
 ```mermaid
-flowchart TB
-    subgraph clients [Clients]
-        CLI[CLI<br/>main.py]
-        Browser[Browser<br/>React SPA]
+flowchart LR
+    %% =========================
+    %% Clients
+    %% =========================
+    subgraph CLIENTS["Clients"]
+        CLI["💻 CLI<br/>main.py"]
+        Browser["🌐 Browser<br/>React SPA"]
     end
 
-    subgraph presentation [Presentation]
-        Main[main.py]
-        API[FastAPI<br/>src/api/]
-        Static[Static files<br/>frontend/dist]
+    %% =========================
+    %% Presentation Layer
+    %% =========================
+    subgraph PRESENTATION["Presentation Layer"]
+        Main["main.py"]
+        API["FastAPI<br/>src/api/"]
+        Static["Static Assets<br/>frontend/dist"]
     end
 
-    subgraph session [Session layer]
-        Store[SessionStore]
-        ChatSvc[OrchestratorChatService<br/>per session_id]
+    %% =========================
+    %% Session Layer
+    %% =========================
+    subgraph SESSION["Session Layer"]
+        Store["SessionStore"]
+        ChatSvc["OrchestratorChatService<br/>(per session_id)"]
     end
 
-    subgraph agents [Agent layer]
-        Orch[Orchestrator]
-        RAG[RAG Agent]
-        Order[Order Agent]
+    %% =========================
+    %% Agent Layer
+    %% =========================
+    subgraph AGENTS["Agent Layer"]
+        Orch["Orchestrator"]
+        RAG["RAG Agent"]
+        Order["Order Agent"]
     end
 
-    subgraph data [Data layer]
-        Chroma[(ChromaDB)]
-        SQLite[(SQLite)]
-        Catalog[Product Catalog]
+    %% =========================
+    %% Data Layer
+    %% =========================
+    subgraph DATA["Data Layer"]
+        Chroma[("ChromaDB")]
+        SQLite[("SQLite")]
+        Catalog["Product Catalog"]
     end
 
-    OpenAI[OpenAI API]
+    OpenAI["OpenAI API"]
 
+    %% =========================
+    %% Flows
+    %% =========================
     CLI --> Main
-    Browser -->|"/api/*" REST| API
-    Browser -->|production: same origin| Static
-    Main -->|CLI path| Orch
+
+    Browser -->|"REST /api/*"| API
+    Browser -->|"Static assets"| Static
+
+    Main -->|"CLI mode"| Orch
     Main -->|"--ui"| API
+
     API --> Store
     Store --> ChatSvc
     ChatSvc --> Orch
+
     API --> Static
 
     Orch --> RAG
     Orch --> Order
+
     RAG --> Chroma
     RAG --> Catalog
+
     Order --> SQLite
     Order --> Catalog
 
-    Orch -.-> OpenAI
-    RAG -.-> OpenAI
-    Order -.-> OpenAI
+    Orch -. AI .-> OpenAI
+    RAG -. AI .-> OpenAI
+    Order -. AI .-> OpenAI
 
-    style Orch fill:#4A90E2,stroke:#2E5C8A,stroke-width:3px,color:#fff
-    style RAG fill:#50C878,stroke:#2E7A4A,stroke-width:2px,color:#fff
-    style Order fill:#E24A90,stroke:#8A2E5C,stroke-width:2px,color:#fff
-    style API fill:#7B68EE,stroke:#5A4AB8,stroke-width:2px,color:#fff
-    style Browser fill:#61DAFB,stroke:#3A8BB8,stroke-width:2px,color:#000
+    %% =========================
+    %% Styling
+    %% =========================
+    classDef client fill:#E3F2FD,stroke:#64B5F6,stroke-width:2px,color:#0D253F
+    classDef presentation fill:#EDE7F6,stroke:#7E57C2,stroke-width:2px,color:#2A1B47
+    classDef session fill:#FFF3E0,stroke:#FB8C00,stroke-width:2px,color:#4E342E
+    classDef agent fill:#E8F5E9,stroke:#43A047,stroke-width:2px,color:#1B4332
+    classDef data fill:#F3E5F5,stroke:#AB47BC,stroke-width:2px,color:#4A148C
+    classDef external fill:#ECEFF1,stroke:#607D8B,stroke-width:2px,color:#263238
+
+    class CLI,Browser client
+    class Main,API,Static presentation
+    class Store,ChatSvc session
+    class Orch,RAG,Order agent
+    class Chroma,SQLite,Catalog data
+    class OpenAI external
 ```
 
 ## 3. Project Structure
