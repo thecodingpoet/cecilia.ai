@@ -112,17 +112,12 @@ uv run src/initialize_vector_store.py
 
 ## Usage
 
-The application supports a **CLI** and a **Web UI**.
-
-### Command-Line Interface (CLI)
-
-<img width="892" height="629" alt="Screenshot 2025-12-16 at 08 12 08" src="https://github.com/user-attachments/assets/a55c40e3-f498-44af-a3b6-86708052d170" />
-
-```bash
-uv run src/main.py
-```
+The application supports a **Web UI** and a **CLI**.
 
 ### Web UI
+
+<img width="1913" height="2067" alt="image" src="https://github.com/user-attachments/assets/1bc4c178-ba2b-40e3-bbdf-a7d02b05651a" />
+
 
 Build the frontend and start the server:
 
@@ -133,6 +128,14 @@ uv run src/main.py --ui
 
 - App: `http://127.0.0.1:8000` (default)
 - Add `--open` to launch the browser
+
+### Command-Line Interface (CLI)
+
+<img width="892" height="629" alt="Screenshot 2025-12-16 at 08 12 08" src="https://github.com/user-attachments/assets/a55c40e3-f498-44af-a3b6-86708052d170" />
+
+```bash
+uv run src/main.py
+```
 
 **Development** (hot reload):
 
