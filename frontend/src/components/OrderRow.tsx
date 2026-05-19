@@ -5,7 +5,6 @@ import {
   formatDateTime,
   formatRelativeTime,
 } from "../lib/format";
-import OrderStatusBadge from "./OrderStatusBadge";
 
 interface Props {
   order: Order;
@@ -40,7 +39,7 @@ export default function OrderRow({ order }: Props) {
         aria-controls={detailId}
         className="w-full px-4 py-3 text-left transition-colors hover:bg-[rgba(255,255,255,0.02)] sm:px-5"
       >
-        <div className="hidden gap-4 sm:grid sm:grid-cols-[minmax(0,1.1fr)_minmax(0,1.4fr)_auto_auto_auto_1.25rem] sm:items-center">
+        <div className="hidden gap-4 sm:grid sm:grid-cols-[minmax(0,1.1fr)_minmax(0,1.4fr)_auto_auto_1.25rem] sm:items-center">
           <div className="min-w-0">
             <p className="font-mono text-sm font-medium text-[var(--accent)]">
               {order.order_id}
@@ -62,7 +61,6 @@ export default function OrderRow({ order }: Props) {
               {order.customer_email}
             </p>
           </div>
-          <OrderStatusBadge status={order.status} />
           <p
             className="text-right text-sm tabular-nums text-[var(--text-muted)]"
             title={formatDateTime(order.created_at)}
@@ -81,14 +79,11 @@ export default function OrderRow({ order }: Props) {
         </div>
 
         <div className="flex flex-col gap-2 sm:hidden">
-          <div className="flex items-start justify-between gap-2">
-            <div>
-              <p className="font-mono text-sm font-medium text-[var(--accent)]">
-                {order.order_id}
-              </p>
-              <p className="mt-1 font-medium">{order.customer_name}</p>
-            </div>
-            <OrderStatusBadge status={order.status} />
+          <div>
+            <p className="font-mono text-sm font-medium text-[var(--accent)]">
+              {order.order_id}
+            </p>
+            <p className="mt-1 font-medium">{order.customer_name}</p>
           </div>
           <p className="text-sm text-[var(--text-muted)]">{order.customer_email}</p>
           <div className="flex items-center justify-between text-sm">

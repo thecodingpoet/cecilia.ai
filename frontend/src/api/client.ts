@@ -41,7 +41,6 @@ export interface Order {
   customer_name: string;
   customer_email: string;
   total_amount: number;
-  status: string;
   created_at: string;
   updated_at: string;
   items: OrderItem[];

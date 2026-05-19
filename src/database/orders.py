@@ -28,7 +28,6 @@ class Order(Base):
     customer_name = Column(String, nullable=False)
     customer_email = Column(String, nullable=False)
     total_amount = Column(Float, nullable=False)
-    status = Column(String, default="pending", nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
@@ -70,7 +69,6 @@ def order_to_dict(order: Order) -> dict:
         "customer_name": order.customer_name,
         "customer_email": order.customer_email,
         "total_amount": order.total_amount,
-        "status": order.status,
         "created_at": _dt_iso(order.created_at),
         "updated_at": _dt_iso(order.updated_at),
         "items": [
@@ -140,7 +138,6 @@ class OrderDatabase:
                 customer_name=customer_name,
                 customer_email=customer_email,
                 total_amount=total_amount,
-                status="pending",
             )
 
             for item in items:
@@ -249,32 +246,6 @@ class OrderDatabase:
             for order in orders:
                 _ = order.items
             return orders
-        finally:
-            session.close()
-
-    def update_order_status(self, order_id: str, status: str) -> Optional[Order]:
-        """Update the status of an order.
-
-        Args:
-            order_id: Unique order identifier
-            status: New status (e.g., 'pending', 'confirmed', 'shipped', 'delivered', 'cancelled')
-
-        Returns:
-            Updated Order object if found, None otherwise
-        """
-        session = self._get_session()
-        try:
-            order = session.query(Order).filter(Order.order_id == order_id).first()
-            if order:
-                order.status = status
-                order.updated_at = datetime.utcnow()
-                session.commit()
-                session.refresh(order)
-                _ = order.items
-            return order
-        except Exception as e:
-            session.rollback()
-            raise e
         finally:
             session.close()
 
