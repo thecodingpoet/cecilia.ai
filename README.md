@@ -129,14 +129,6 @@ uv run src/main.py --ui
 - App: `http://127.0.0.1:8000` (default)
 - Add `--open` to launch the browser
 
-### Command-Line Interface (CLI)
-
-<img width="892" height="629" alt="Screenshot 2025-12-16 at 08 12 08" src="https://github.com/user-attachments/assets/a55c40e3-f498-44af-a3b6-86708052d170" />
-
-```bash
-uv run src/main.py
-```
-
 **Development** (hot reload):
 
 ```bash
@@ -154,6 +146,14 @@ cd frontend && npm run dev
 
 ```bash
 uv run src/main.py --ui --port 8080
+```
+
+### Command-Line Interface (CLI)
+
+<img width="892" height="629" alt="Screenshot 2025-12-16 at 08 12 08" src="https://github.com/user-attachments/assets/a55c40e3-f498-44af-a3b6-86708052d170" />
+
+```bash
+uv run src/main.py
 ```
 
 ### Verbose Mode
