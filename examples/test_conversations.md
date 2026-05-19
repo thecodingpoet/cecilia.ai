@@ -308,20 +308,20 @@ I want to order 1000 TECH-009 Logitech mice
 
    **CLI** (single terminal session):
    ```bash
-   uv run src/main.py
+   uv run backend/main.py
    ```
 
    **Web UI** (production-style):
    ```bash
    cd frontend && npm run build && cd ..
-   uv run src/main.py --ui
+   uv run backend/main.py --ui
    ```
    Open `http://127.0.0.1:8000` and use the chat page.
 
    **Web UI** (development):
    ```bash
    # Terminal 1
-   uv run src/main.py --ui --dev
+   uv run backend/main.py --ui --dev
    # Terminal 2
    cd frontend && npm run dev
    ```

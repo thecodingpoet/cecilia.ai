@@ -6,7 +6,7 @@ from the database module. Use this to quickly initialize or reset
 the vector store from the command line.
 
 Usage:
-    cd src && python initialize_vector_store.py
+    cd backend && python initialize_vector_store.py
 """
 
 from dotenv import load_dotenv

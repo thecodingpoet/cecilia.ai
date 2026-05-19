@@ -126,9 +126,9 @@ if __name__ == "__main__":
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
         Examples:
-          python src/main.py
-          python src/main.py --ui
-          python src/main.py --ui --dev
+          python backend/main.py
+          python backend/main.py --ui
+          python backend/main.py --ui --dev
         """,
     )
     parser.add_argument(

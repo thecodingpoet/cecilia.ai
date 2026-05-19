@@ -6,8 +6,8 @@
 
 | Surface | Stack | Entry point |
 |---------|-------|-------------|
-| **CLI** | Python | `uv run src/main.py` |
-| **Web UI** | React + TypeScript (Vite) → FastAPI → agents | `uv run src/main.py --ui` |
+| **CLI** | Python | `uv run backend/main.py` |
+| **Web UI** | React + TypeScript (Vite) → FastAPI → agents | `uv run backend/main.py --ui` |
 
 The web UI is the primary interface: a React SPA talks to a FastAPI server, which routes each browser tab to an isolated chat session backed by the same orchestrator and agents used by the CLI.
 
@@ -45,7 +45,7 @@ flowchart LR
     %% =========================
     subgraph PRESENTATION["Presentation Layer"]
         Main["main.py"]
-        API["FastAPI<br/>src/api/"]
+        API["FastAPI<br/>backend/api/"]
         Static["Static Assets<br/>frontend/dist"]
     end
 
@@ -136,7 +136,7 @@ ecommerce-bot/
 │   │   ├── hooks/            # useChat, useOrders
 │   │   └── pages/            # ChatPage, OrdersPage
 │   └── dist/                 # production build (served by FastAPI)
-├── src/
+├── backend/
 │   ├── agents/               # Orchestrator, RAG, Order agents
 │   ├── api/                  # FastAPI app, schemas, SessionStore
 │   ├── database/             # products, orders, ChromaDB
@@ -149,19 +149,19 @@ ecommerce-bot/
 
 ## 4. Presentation Layer
 
-### A. CLI (`src/main.py`)
+### A. CLI (`backend/main.py`)
 
 The CLI runs a single `ChatSession` in-process. There is no HTTP layer and no session IDs—one terminal run equals one conversation.
 
 ### B. Web UI
 
-**Production** (`uv run src/main.py --ui`):
+**Production** (`uv run backend/main.py --ui`):
 
 1. Uvicorn serves FastAPI on port 8000 (default).
 2. Built assets from `frontend/dist` are mounted at `/` (SPA fallback).
 3. API routes live under `/api/*` on the same origin.
 
-**Development** (`uv run src/main.py --ui --dev`):
+**Development** (`uv run backend/main.py --ui --dev`):
 
 1. FastAPI runs API-only with CORS for `localhost:5173`.
 2. Vite dev server (`cd frontend && npm run dev`) serves the UI and proxies `/api` to port 8000.
@@ -178,7 +178,7 @@ The CLI runs a single `ChatSession` in-process. There is no HTTP layer and no se
 - The browser generates a UUID and stores it in `localStorage` (`cecilia-session-id`).
 - Every chat request includes `session_id` so the server can isolate history, orchestrator state, and cart per tab/user.
 
-### C. HTTP API (`src/api/`)
+### C. HTTP API (`backend/api/`)
 
 | Method | Path | Description |
 |--------|------|-------------|
@@ -187,11 +187,11 @@ The CLI runs a single `ChatSession` in-process. There is no HTTP layer and no se
 | `POST` | `/api/session/reset` | Clear history, cart, and orchestrator state for `session_id` (204) |
 | `GET` | `/api/orders` | Recent orders for the orders page |
 
-`ChatSession` (`src/chat/session.py`) wraps one `Orchestrator` instance and chat history per conversation. `SessionStore` maps `session_id` → session, with a cap of 100 sessions (oldest evicted). The CLI uses the same `ChatSession` class for a single in-process conversation.
+`ChatSession` (`backend/chat/session.py`) wraps one `Orchestrator` instance and chat history per conversation. `SessionStore` maps `session_id` → session, with a cap of 100 sessions (oldest evicted). The CLI uses the same `ChatSession` class for a single in-process conversation.
 
 ## 5. Agent Architecture
 
-### A. The Orchestrator (`src/agents/orchestrator.py`)
+### A. The Orchestrator (`backend/agents/orchestrator.py`)
 
 The central router directing user intents to specialized agents.
 
@@ -204,12 +204,12 @@ The central router directing user intents to specialized agents.
 
 ### B. Specialized Agents
 
-1. **RAG Agent (`src/agents/rag_agent.py`)**
+1. **RAG Agent (`backend/agents/rag_agent.py`)**
     - **Purpose:** Answers questions about products.
     - **Mechanism:** Hybrid search—exact match by ID/name first, then ChromaDB semantic search.
     - **Tools:** `retrieve_products`, `transfer_to_order_agent`.
 
-2. **Order Agent (`src/agents/order_agent.py`)**
+2. **Order Agent (`backend/agents/order_agent.py`)**
     - **Purpose:** Checkout flow.
     - **Mechanism:** Collects customer details, validates stock, creates orders.
     - **Tools:** `add_to_cart`, `remove_from_cart`, `view_cart`, `create_order`, `transfer_to_rag_agent`.
@@ -241,11 +241,11 @@ The orchestrator keeps the last **10** messages when passing history to agents (
 
 ## 6. Data Layer
 
-1. **Product Catalog (`src/database/products.py`)**
+1. **Product Catalog (`backend/database/products.py`)**
     - Source: `data/products.json`
     - Exact lookup + ChromaDB embeddings for hybrid RAG search
 
-2. **Order Management (`src/database/orders.py`)**
+2. **Order Management (`backend/database/orders.py`)**
     - SQLite: `data/ecommerce.db`
     - SQLAlchemy models: `Order`, `OrderItem`
 

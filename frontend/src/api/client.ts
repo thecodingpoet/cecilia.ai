@@ -57,7 +57,7 @@ function apiErrorMessage(
   fallback: string
 ): string {
   if (res.status === 404) {
-    return "Orders API not found. Restart the backend (uv run python src/main.py --ui).";
+    return "Orders API not found. Restart the backend (uv run backend/main.py --ui).";
   }
   return err.detail ?? `${fallback} (${res.status})`;
 }
