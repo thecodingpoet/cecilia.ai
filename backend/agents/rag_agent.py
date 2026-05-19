@@ -17,7 +17,7 @@ from langchain_openai import ChatOpenAI
 
 
 from database import ProductCatalog, ProductVectorStore
-from schema import RAGResponse
+from agents.schemas import RAGResponse
 
 load_dotenv()
 

@@ -10,7 +10,7 @@ from langchain_openai import ChatOpenAI
 
 from agents.order_agent import OrderAgent
 from agents.rag_agent import RAGAgent
-from schema import OrchestratorResponse
+from agents.schemas import OrchestratorResponse
 
 load_dotenv()
 

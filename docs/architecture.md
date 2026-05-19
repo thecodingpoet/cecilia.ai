@@ -137,8 +137,8 @@ ecommerce-bot/
 │   │   └── pages/            # ChatPage, OrdersPage
 │   └── dist/                 # production build (served by FastAPI)
 ├── backend/
-│   ├── agents/               # Orchestrator, RAG, Order agents
-│   ├── api/                  # FastAPI app, schemas, SessionStore
+│   ├── agents/               # Orchestrator, RAG, Order agents, agent schemas
+│   ├── api/                  # FastAPI app, HTTP schemas, SessionStore
 │   ├── database/             # products, orders, ChromaDB
 │   ├── chat/                 # ChatSession (orchestrator + history)
 │   └── main.py               # CLI + --ui entry point
@@ -213,7 +213,7 @@ The central router directing user intents to specialized agents.
     - **Purpose:** Checkout flow.
     - **Mechanism:** Collects customer details, validates stock, creates orders.
     - **Tools:** `add_to_cart`, `remove_from_cart`, `view_cart`, `create_order`, `transfer_to_rag_agent`.
-    - **Protocol:** Structured `OrderResponse` statuses (`collecting_info`, `confirming`, `completed`).
+    - **Protocol:** Structured `OrderAgentResponse` statuses (`collecting_info`, `confirming`, `completed`).
 
 ### Middleware Configuration
 

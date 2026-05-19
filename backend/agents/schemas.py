@@ -1,5 +1,5 @@
 """
-Pydantic models for agent responses and data structures.
+Pydantic models for agent structured outputs.
 """
 
 from typing import List, Literal, Optional
@@ -41,7 +41,7 @@ class RAGResponse(SubAgentResponse):
     )
 
 
-class OrderResponse(SubAgentResponse):
+class OrderAgentResponse(SubAgentResponse):
     """Structured response from Order Agent."""
 
     status: Literal["collecting_info", "confirming", "completed", "failed"] = Field(
