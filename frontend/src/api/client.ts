@@ -1,7 +1,22 @@
+export interface Product {
+  product_id: string;
+  name: string;
+  description: string;
+  price: number;
+  category: string;
+  stock_status: string;
+  image_url?: string | null;
+}
+
+export interface ChatResult {
+  reply: string;
+  products: Product[];
+}
+
 export async function sendMessage(
   sessionId: string,
   message: string
-): Promise<string> {
+): Promise<ChatResult> {
   const res = await fetch("/api/chat", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -13,8 +28,11 @@ export async function sendMessage(
       (err as { detail?: string }).detail ?? `Request failed (${res.status})`
     );
   }
-  const data = (await res.json()) as { reply: string };
-  return data.reply;
+  const data = (await res.json()) as ChatResult;
+  return {
+    reply: data.reply,
+    products: data.products ?? [],
+  };
 }
 
 export async function resetSession(sessionId: string): Promise<void> {

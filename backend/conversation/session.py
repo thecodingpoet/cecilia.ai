@@ -1,20 +1,30 @@
 """Conversation session: orchestrator + message history for one dialogue.
 
 Used by SessionStore (web) and run_cli. The React client calls:
-  POST /api/chat            { "message", "session_id" } -> { "reply" }
+  POST /api/chat            { "message", "session_id" } -> { "reply", "products" }
   POST /api/session/reset   { "session_id" } -> 204
 """
 
 import logging
+from dataclasses import dataclass, field
 from typing import List, Protocol
 
 from agents.orchestrator import Orchestrator
+from schema import ProductInfo
+
+
+@dataclass
+class ChatReply:
+    """Assistant turn returned to HTTP clients and the CLI."""
+
+    reply: str
+    products: List[ProductInfo] = field(default_factory=list)
 
 
 class ChatService(Protocol):
     """Minimal conversation contract for HTTP clients and tests."""
 
-    def send(self, message: str) -> str:
+    def send(self, message: str) -> ChatReply:
         """Send a user message and return the assistant reply."""
         ...
 
@@ -38,9 +48,9 @@ class ChatSession:
         self._verbose = verbose
         self._history: List[dict] = []
 
-    def send(self, message: str) -> str:
+    def send(self, message: str) -> ChatReply:
         if not message.strip():
-            return ""
+            return ChatReply(reply="")
 
         try:
             self._logger.debug(
@@ -52,19 +62,22 @@ class ChatSession:
                 message, chat_history=self._history
             )
             reply = response.message
+            products = list(response.products)
 
             self._history.append({"role": "user", "content": message})
             self._history.append({"role": "assistant", "content": reply})
 
-            return reply
+            return ChatReply(reply=reply, products=products)
 
         except Exception as e:
             self._logger.error(f"Error: {e}")
             if self._verbose:
                 self._logger.exception("Full traceback:")
-            return (
-                "Something went wrong while processing your request. "
-                f"Details: {e}\n\nPlease try again."
+            return ChatReply(
+                reply=(
+                    "Something went wrong while processing your request. "
+                    f"Details: {e}\n\nPlease try again."
+                )
             )
 
     def reset(self) -> None:

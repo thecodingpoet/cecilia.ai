@@ -2,6 +2,7 @@ import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import type { Message } from "../hooks/useChat";
+import ProductGrid from "./ProductGrid";
 
 interface Props {
   message: Message;
@@ -33,6 +34,9 @@ export default function MessageBubble({ message }: Props) {
           {message.content}
         </ReactMarkdown>
       </div>
+      {message.products && message.products.length > 0 && (
+        <ProductGrid products={message.products} />
+      )}
       <button
         type="button"
         onClick={handleCopy}

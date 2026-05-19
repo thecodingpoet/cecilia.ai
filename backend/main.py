@@ -86,11 +86,11 @@ def run_cli(verbose: bool = False):
             spinner = Spinner("Processing")
             spinner.start()
             try:
-                reply = session.send(user_input)
+                result = session.send(user_input)
             finally:
                 spinner.stop()
 
-            print(f"Assistant: {reply}")
+            print(f"Assistant: {result.reply}")
 
         except KeyboardInterrupt:
             print("\n\nThank you for shopping with us! Goodbye!")

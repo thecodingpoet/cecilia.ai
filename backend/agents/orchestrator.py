@@ -87,6 +87,8 @@ class Orchestrator:
         self._chat_history = []
         self._state = OrchestratorState.INTENT
         self._cart = []
+        self._last_rag_products: List[ProductInfo] = []
+        self.product_catalog = ProductCatalog()
 
         self.rag_agent = RAGAgent(
             model_name=model_name, temperature=temperature, timeout=timeout
@@ -121,6 +123,7 @@ class Orchestrator:
                 request, chat_history=self._truncate_history()
             )
 
+            self._last_rag_products = list(result.products)
             return self._append_product_details(result.message, result.products)
 
         @tool
@@ -248,6 +251,7 @@ class Orchestrator:
         self._state = OrchestratorState.INTENT
         self._chat_history.clear()
         self._cart.clear()
+        self._last_rag_products = []
         logger.info("Orchestrator session reset")
 
     def invoke(
@@ -268,6 +272,7 @@ class Orchestrator:
         )
 
         self._chat_history = chat_history.copy() if chat_history else []
+        self._last_rag_products = []
 
         if self._state.is_checkout_mode():
             return self._handle_checkout_mode(user_query)
@@ -310,11 +315,16 @@ class Orchestrator:
                     )
 
                 # Append product details to message to preserve IDs in history
+                self._last_rag_products = list(rag_result.products)
                 final_message = self._append_product_details(
                     rag_result.message, rag_result.products
                 )
 
-                return OrchestratorResponse(message=final_message, agent_used="rag")
+                return OrchestratorResponse(
+                    message=final_message,
+                    agent_used="rag",
+                    products=self._enrich_products(self._last_rag_products),
+                )
 
         return OrchestratorResponse(message=result.message, agent_used="order")
 
@@ -358,7 +368,30 @@ class Orchestrator:
             )
 
         logger.info(f"Agent used: {structured_response.agent_used}")
-        return structured_response
+        return self._attach_products(structured_response)
+
+    def _enrich_products(self, products: List[ProductInfo]) -> List[ProductInfo]:
+        """Add image_url paths for products that exist in the catalog."""
+        enriched: List[ProductInfo] = []
+        for product in products:
+            if not self.product_catalog.get_product(product.product_id):
+                continue
+            enriched.append(
+                product.model_copy(
+                    update={"image_url": f"/products/{product.product_id}.jpg"}
+                )
+            )
+        return enriched
+
+    def _attach_products(
+        self, response: OrchestratorResponse
+    ) -> OrchestratorResponse:
+        """Attach enriched search products when a RAG search ran this turn."""
+        if not self._last_rag_products:
+            return response
+        return response.model_copy(
+            update={"products": self._enrich_products(self._last_rag_products)}
+        )
 
     def _append_product_details(self, message: str, products: List) -> str:
         """

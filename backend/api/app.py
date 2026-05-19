@@ -20,6 +20,7 @@ from database.orders import OrderDatabase
 
 _REPO_ROOT = Path(__file__).resolve().parents[2]
 _FRONTEND_DIST = _REPO_ROOT / "frontend" / "dist"
+_PRODUCTS_PUBLIC = _REPO_ROOT / "frontend" / "public" / "products"
 _ORDERS_DB = OrderDatabase(db_path=str(_REPO_ROOT / "data" / "ecommerce.db"))
 
 
@@ -50,8 +51,8 @@ def create_api_app(
         if not message:
             raise HTTPException(status_code=400, detail="Message cannot be empty")
         service = session_store.get(body.session_id)
-        reply = service.send(message)
-        return ChatResponse(reply=reply)
+        result = service.send(message)
+        return ChatResponse(reply=result.reply, products=result.products)
 
     @app.post("/api/session/reset", status_code=204)
     def reset_session(body: ResetRequest) -> None:
@@ -63,6 +64,12 @@ def create_api_app(
         orders = _ORDERS_DB.get_all_orders(limit=limit)
         payload = [OrderResponse.from_order(o) for o in orders]
         return OrdersListResponse(orders=payload, count=len(payload))
+
+    products_dir = _FRONTEND_DIST / "products"
+    if not products_dir.is_dir() and _PRODUCTS_PUBLIC.is_dir():
+        products_dir = _PRODUCTS_PUBLIC
+    if products_dir.is_dir():
+        app.mount("/products", StaticFiles(directory=products_dir), name="products")
 
     if _FRONTEND_DIST.is_dir() and (_FRONTEND_DIST / "index.html").is_file():
         assets_dir = _FRONTEND_DIST / "assets"

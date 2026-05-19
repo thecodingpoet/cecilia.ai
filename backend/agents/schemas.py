@@ -31,6 +31,9 @@ class ProductInfo(BaseModel):
     price: float = Field(description="Product price in dollars")
     category: str = Field(description="Product category")
     stock_status: str = Field(description="Stock availability status")
+    image_url: Optional[str] = Field(
+        None, description="URL path to product image for UI display"
+    )
 
 
 class RAGResponse(SubAgentResponse):
@@ -64,4 +67,8 @@ class OrchestratorResponse(BaseAgentResponse):
 
     agent_used: str = Field(
         description="Which agent handled the request: 'rag', 'order', or 'orchestrator'."
+    )
+    products: List[ProductInfo] = Field(
+        default_factory=list,
+        description="Products from the latest search (populated in code, not by the LLM)",
     )

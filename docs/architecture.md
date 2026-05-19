@@ -184,7 +184,7 @@ The CLI runs a single `ChatSession` in-process. There is no HTTP layer and no se
 | Method | Path | Description |
 |--------|------|-------------|
 | `GET` | `/api/health` | Health check |
-| `POST` | `/api/chat` | `{ session_id, message }` → `{ reply }` |
+| `POST` | `/api/chat` | `{ session_id, message }` → `{ reply, products? }` |
 | `POST` | `/api/session/reset` | Clear history, cart, and orchestrator state for `session_id` (204) |
 | `GET` | `/api/orders` | Recent orders for the orders page |
 
@@ -245,6 +245,7 @@ The orchestrator keeps the last **10** messages when passing history to agents (
 1. **Product Catalog (`backend/database/products.py`)**
     - Source: `data/products.json`
     - Exact lookup + ChromaDB embeddings for hybrid RAG search
+    - UI images: `frontend/public/products/{product_id}.jpg` (orchestrator sets `image_url` on search results)
 
 2. **Order Management (`backend/database/orders.py`)**
     - SQLite: `data/ecommerce.db`
@@ -263,8 +264,9 @@ The orchestrator keeps the last **10** messages when passing history to agents (
 1. User sends message from React → `POST /api/chat`.
 2. FastAPI resolves `session_id` via `SessionStore.get()`.
 3. `ChatSession.send()` calls `Orchestrator.invoke()` and persists history server-side.
-4. Reply returned as JSON; UI renders in `ChatThread`.
-5. "Clear chat" → `POST /api/session/reset` clears UI messages, chat history, orchestrator state (including cart), for the same `session_id`.
+4. Reply returned as JSON (`reply` plus optional `products` from the latest catalog search); UI renders markdown in `MessageBubble` and a product card grid when `products` is non-empty.
+5. Product images are static files at `frontend/public/products/{product_id}.jpg`, served at `/products/{product_id}.jpg` (Vite `public/` in dev; FastAPI mounts `dist/products` or `public/products` in production). Regenerate placeholders with `python scripts/generate_product_placeholders.py`.
+6. "Clear chat" → `POST /api/session/reset` clears UI messages, chat history, orchestrator state (including cart), for the same `session_id`.
 
 ### Orchestrator routing (both paths)
 
