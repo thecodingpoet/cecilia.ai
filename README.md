@@ -54,6 +54,7 @@ ecommerce-bot/
 │   ├── api/           # FastAPI routes and session store
 │   ├── database/      # Products, orders, vector store
 │   ├── chat/          # ChatSession (orchestrator + history per conversation)
+│   ├── scripts/       # setup and dev tooling (vector store init, REPL)
 │   └── main.py        # CLI and --ui entry point
 ├── data/              # products.json, ecommerce.db, chroma/
 ├── docs/              # architecture.md
@@ -109,7 +110,7 @@ OPENAI_API_KEY=sk-...
 Populate the vector store with the product catalog:
 
 ```bash
-uv run backend/initialize_vector_store.py
+uv run backend/scripts/init_vector_store.py
 ```
 
 ## Usage
@@ -192,7 +193,7 @@ uv run backend/main.py --ui --verbose
 <img width="947" height="829" alt="Screenshot 2025-12-16 at 08 16 46" src="https://github.com/user-attachments/assets/94289124-4a7c-4b49-873c-1908278d202e" />
 
 ```bash
-uv run backend/console.py
+uv run backend/scripts/dev_console.py
 ```
 
 Pre-initialized objects:

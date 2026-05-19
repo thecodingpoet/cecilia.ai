@@ -141,6 +141,7 @@ ecommerce-bot/
 │   ├── api/                  # FastAPI app, HTTP schemas, SessionStore
 │   ├── database/             # products, orders, ChromaDB
 │   ├── chat/                 # ChatSession (orchestrator + history)
+│   ├── scripts/              # init_vector_store, dev_console
 │   └── main.py               # CLI + --ui entry point
 ├── data/                     # products.json, ecommerce.db, chroma/
 └── docs/
