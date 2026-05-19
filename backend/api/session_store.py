@@ -4,7 +4,7 @@ import logging
 from threading import Lock
 
 from agents.orchestrator import Orchestrator
-from chat.session import ChatSession
+from conversation.session import ChatSession
 
 
 class SessionStore:

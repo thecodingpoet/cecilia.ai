@@ -140,7 +140,7 @@ ecommerce-bot/
 │   ├── agents/               # Orchestrator, RAG, Order agents, agent schemas
 │   ├── api/                  # FastAPI app, HTTP schemas, SessionStore
 │   ├── database/             # products, orders, ChromaDB
-│   ├── chat/                 # ChatSession (orchestrator + history)
+│   ├── conversation/         # ChatSession (orchestrator + history)
 │   ├── scripts/              # init_vector_store, dev_console
 │   └── main.py               # CLI + --ui entry point
 ├── data/                     # products.json, ecommerce.db, chroma/
@@ -188,7 +188,7 @@ The CLI runs a single `ChatSession` in-process. There is no HTTP layer and no se
 | `POST` | `/api/session/reset` | Clear history, cart, and orchestrator state for `session_id` (204) |
 | `GET` | `/api/orders` | Recent orders for the orders page |
 
-`ChatSession` (`backend/chat/session.py`) wraps one `Orchestrator` instance and chat history per conversation. `SessionStore` maps `session_id` → session, with a cap of 100 sessions (oldest evicted). The CLI uses the same `ChatSession` class for a single in-process conversation.
+`ChatSession` (`backend/conversation/session.py`) wraps one `Orchestrator` instance and message history per conversation. `SessionStore` maps `session_id` → session, with a cap of 100 sessions (oldest evicted). The CLI uses the same `ChatSession` class for a single in-process conversation.
 
 ## 5. Agent Architecture
 

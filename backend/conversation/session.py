@@ -1,4 +1,4 @@
-"""Chat session: orchestrator + conversation history for one conversation.
+"""Conversation session: orchestrator + message history for one dialogue.
 
 Used by SessionStore (web) and run_cli. The React client calls:
   POST /api/chat            { "message", "session_id" } -> { "reply" }
@@ -12,7 +12,7 @@ from agents.orchestrator import Orchestrator
 
 
 class ChatService(Protocol):
-    """Minimal chat contract for HTTP clients and tests."""
+    """Minimal conversation contract for HTTP clients and tests."""
 
     def send(self, message: str) -> str:
         """Send a user message and return the assistant reply."""
@@ -24,7 +24,7 @@ class ChatService(Protocol):
 
 
 class ChatSession:
-    """One conversation: wraps Orchestrator with server-side chat history."""
+    """One conversation: wraps Orchestrator with server-side message history."""
 
     def __init__(
         self,

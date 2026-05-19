@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 
 from agents.orchestrator import Orchestrator
 from api.server import run_custom_ui
-from chat.session import ChatSession
+from conversation.session import ChatSession
 from utils.logger import setup_logger
 from utils.spinner import Spinner
 
