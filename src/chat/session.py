@@ -1,6 +1,6 @@
-"""Chat adapter between the HTTP API and orchestrator.
+"""Chat session: orchestrator + conversation history for one conversation.
 
-Used by SessionStore; the React client calls:
+Used by SessionStore (web) and run_cli. The React client calls:
   POST /api/chat            { "message", "session_id" } -> { "reply" }
   POST /api/session/reset   { "session_id" } -> 204
 """
@@ -8,23 +8,23 @@ Used by SessionStore; the React client calls:
 import logging
 from typing import List, Protocol
 
-from agents.orchestrator import Orchestrator, OrchestratorState
+from agents.orchestrator import Orchestrator
 
 
 class ChatService(Protocol):
-    """Minimal chat contract for HTTP clients."""
+    """Minimal chat contract for HTTP clients and tests."""
 
     def send(self, message: str) -> str:
         """Send a user message and return the assistant reply."""
         ...
 
     def reset(self) -> None:
-        """Clear conversation history and agent session state."""
+        """Clear conversation history, cart, and orchestrator session state."""
         ...
 
 
-class OrchestratorChatService:
-    """Wraps Orchestrator with server-side chat history."""
+class ChatSession:
+    """One conversation: wraps Orchestrator with server-side chat history."""
 
     def __init__(
         self,
@@ -69,4 +69,4 @@ class OrchestratorChatService:
 
     def reset(self) -> None:
         self._history.clear()
-        self._orchestrator._state = OrchestratorState.INTENT
+        self._orchestrator.reset_session()

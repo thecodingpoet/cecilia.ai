@@ -54,7 +54,7 @@ flowchart LR
     %% =========================
     subgraph SESSION["Session Layer"]
         Store["SessionStore"]
-        ChatSvc["OrchestratorChatService<br/>(per session_id)"]
+        ChatSvc["ChatSession<br/>(per session_id)"]
     end
 
     %% =========================
@@ -85,7 +85,7 @@ flowchart LR
     Browser -->|"REST /api/*"| API
     Browser -->|"Static assets"| Static
 
-    Main -->|"CLI mode"| Orch
+    Main -->|"CLI mode"| ChatSvc
     Main -->|"--ui"| API
 
     API --> Store
@@ -140,7 +140,7 @@ ecommerce-bot/
 │   ├── agents/               # Orchestrator, RAG, Order agents
 │   ├── api/                  # FastAPI app, schemas, SessionStore
 │   ├── database/             # products, orders, ChromaDB
-│   ├── ui/                   # OrchestratorChatService (API adapter)
+│   ├── chat/                 # ChatSession (orchestrator + history)
 │   └── main.py               # CLI + --ui entry point
 ├── data/                     # products.json, ecommerce.db, chroma/
 └── docs/
@@ -151,7 +151,7 @@ ecommerce-bot/
 
 ### A. CLI (`src/main.py`)
 
-The CLI runs the orchestrator in-process with a single in-memory chat history list. There is no HTTP layer and no session IDs—one terminal session equals one conversation.
+The CLI runs a single `ChatSession` in-process. There is no HTTP layer and no session IDs—one terminal run equals one conversation.
 
 ### B. Web UI
 
@@ -184,10 +184,10 @@ The CLI runs the orchestrator in-process with a single in-memory chat history li
 |--------|------|-------------|
 | `GET` | `/api/health` | Health check |
 | `POST` | `/api/chat` | `{ session_id, message }` → `{ reply }` |
-| `POST` | `/api/session/reset` | Clear server-side session (204) |
+| `POST` | `/api/session/reset` | Clear history, cart, and orchestrator state for `session_id` (204) |
 | `GET` | `/api/orders` | Recent orders for the orders page |
 
-`OrchestratorChatService` (`src/ui/chat_service.py`) wraps one `Orchestrator` instance and chat history per session. `SessionStore` maps `session_id` → service, with a cap of 100 sessions (oldest evicted).
+`ChatSession` (`src/chat/session.py`) wraps one `Orchestrator` instance and chat history per conversation. `SessionStore` maps `session_id` → session, with a cap of 100 sessions (oldest evicted). The CLI uses the same `ChatSession` class for a single in-process conversation.
 
 ## 5. Agent Architecture
 
@@ -253,17 +253,17 @@ The orchestrator keeps the last **10** messages when passing history to agents (
 
 ### CLI path
 
-1. User input in `main.py` → `Orchestrator.invoke()` with local `chat_history`.
+1. User input in `main.py` → `ChatSession.send()`.
 2. Orchestrator routes to RAG or Order agent.
-3. Response printed to terminal; history appended in-process.
+3. Response printed to terminal; history appended inside `ChatSession`.
 
 ### Web UI path
 
 1. User sends message from React → `POST /api/chat`.
 2. FastAPI resolves `session_id` via `SessionStore.get()`.
-3. `OrchestratorChatService.send()` calls `Orchestrator.invoke()` and persists history server-side.
+3. `ChatSession.send()` calls `Orchestrator.invoke()` and persists history server-side.
 4. Reply returned as JSON; UI renders in `ChatThread`.
-5. "New chat" → `POST /api/session/reset` clears history and orchestrator state for that session.
+5. "Clear chat" → `POST /api/session/reset` clears UI messages, chat history, orchestrator state (including cart), for the same `session_id`.
 
 ### Orchestrator routing (both paths)
 

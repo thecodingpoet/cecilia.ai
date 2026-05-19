@@ -10,6 +10,7 @@ from dotenv import load_dotenv
 
 from agents.orchestrator import Orchestrator
 from api.server import run_custom_ui
+from chat.session import ChatSession
 from utils.logger import setup_logger
 from utils.spinner import Spinner
 
@@ -67,9 +68,7 @@ def run_cli(verbose: bool = False):
         print("=" * 70)
 
     logger = setup_logging(verbose)
-
-    orchestrator = Orchestrator()
-    chat_history = []
+    session = ChatSession(Orchestrator(), logger, verbose=verbose)
 
     print_banner(verbose)
 
@@ -86,31 +85,16 @@ def run_cli(verbose: bool = False):
         try:
             spinner = Spinner("Processing")
             spinner.start()
-
             try:
-                logger.debug(f"Orchestrator state: {orchestrator._state.value}")
-                logger.debug(f"Chat history length: {len(chat_history)}")
-
-                response = orchestrator.invoke(user_input, chat_history=chat_history)
-                response_message = response.message
-
+                reply = session.send(user_input)
             finally:
                 spinner.stop()
 
-            print(f"Assistant: {response_message}")
-
-            chat_history.append({"role": "user", "content": user_input})
-            chat_history.append({"role": "assistant", "content": response_message})
+            print(f"Assistant: {reply}")
 
         except KeyboardInterrupt:
             print("\n\nThank you for shopping with us! Goodbye!")
             break
-        except Exception as e:
-            logger.error(f"Error: {e}")
-            if verbose:
-                logger.exception("Full traceback:")
-            print(f"\n❌ Error: {e}")
-            print("Please try again.")
 
 
 def main(

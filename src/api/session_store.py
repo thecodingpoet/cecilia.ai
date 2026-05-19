@@ -1,14 +1,14 @@
-"""Per-session OrchestratorChatService instances."""
+"""Per-session ChatSession instances."""
 
 import logging
 from threading import Lock
 
 from agents.orchestrator import Orchestrator
-from ui.chat_service import OrchestratorChatService
+from chat.session import ChatSession
 
 
 class SessionStore:
-    """Maps session_id to an isolated chat service (orchestrator + history)."""
+    """Maps session_id to an isolated chat session (orchestrator + history)."""
 
     def __init__(
         self,
@@ -20,16 +20,16 @@ class SessionStore:
         self._logger = logger
         self._verbose = verbose
         self._max_sessions = max_sessions
-        self._sessions: dict[str, OrchestratorChatService] = {}
+        self._sessions: dict[str, ChatSession] = {}
         self._lock = Lock()
 
-    def get(self, session_id: str) -> OrchestratorChatService:
+    def get(self, session_id: str) -> ChatSession:
         with self._lock:
             if session_id not in self._sessions:
                 if len(self._sessions) >= self._max_sessions:
                     oldest = next(iter(self._sessions))
                     del self._sessions[oldest]
-                self._sessions[session_id] = OrchestratorChatService(
+                self._sessions[session_id] = ChatSession(
                     Orchestrator(),
                     self._logger,
                     verbose=self._verbose,

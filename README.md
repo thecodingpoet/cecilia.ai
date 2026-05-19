@@ -53,7 +53,7 @@ ecommerce-bot/
 │   ├── agents/        # Orchestrator, RAG, Order agents
 │   ├── api/           # FastAPI routes and session store
 │   ├── database/      # Products, orders, vector store
-│   ├── ui/            # Chat service adapter for the API
+│   ├── chat/          # ChatSession (orchestrator + history per conversation)
 │   └── main.py        # CLI and --ui entry point
 ├── data/              # products.json, ecommerce.db, chroma/
 ├── docs/              # architecture.md

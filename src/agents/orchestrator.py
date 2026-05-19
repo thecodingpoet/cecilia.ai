@@ -243,6 +243,13 @@ class Orchestrator:
             f"Orchestrator initialized with model={model_name}, temperature={temperature}, timeout={timeout}s"
         )
 
+    def reset_session(self) -> None:
+        """Reset conversation state: intent mode, empty cart, and internal history."""
+        self._state = OrchestratorState.INTENT
+        self._chat_history.clear()
+        self._cart.clear()
+        logger.info("Orchestrator session reset")
+
     def invoke(
         self, user_query: str, chat_history: Optional[List[Dict]] = None
     ) -> OrchestratorResponse:
