@@ -4,6 +4,7 @@ from datetime import datetime
 
 from pydantic import BaseModel, Field
 
+from agents.schemas import ProductInfo
 from database.orders import Order
 
 
@@ -18,6 +19,7 @@ class ChatRequest(BaseModel):
 
 class ChatResponse(BaseModel):
     reply: str
+    products: list[ProductInfo] = Field(default_factory=list)
 
 
 class ResetRequest(BaseModel):

@@ -10,7 +10,7 @@ from dataclasses import dataclass, field
 from typing import List, Protocol
 
 from agents.orchestrator import Orchestrator
-from schema import ProductInfo
+from agents.schemas import ProductInfo
 
 
 @dataclass

@@ -10,7 +10,8 @@ from langchain_openai import ChatOpenAI
 
 from agents.order_agent import OrderAgent
 from agents.rag_agent import RAGAgent
-from agents.schemas import OrchestratorResponse
+from agents.schemas import OrchestratorResponse, ProductInfo
+from database import ProductCatalog
 
 load_dotenv()
 
