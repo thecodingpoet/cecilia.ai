@@ -1,7 +1,7 @@
 [project]
 name = "ecommerce-bot"
 version = "0.1.0"
-description = "An AI-powered conversational agent that answers product questions using RAG and autonomously processes orders through natural dialogue"
+description = "Cecilia AI — a conversational shopping assistant that answers product questions using RAG and processes orders through natural dialogue"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
@@ -14,6 +14,7 @@ dependencies = [
     "langchain-core>=1.1.0",
     "langchain-openai>=1.1.0",
     "langchain-chroma>=1.0.0",
-    "gradio>=4.0.0",
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.32.0",
 ]
 

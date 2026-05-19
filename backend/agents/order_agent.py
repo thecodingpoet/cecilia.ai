@@ -17,7 +17,7 @@ from langchain.tools import tool
 from langchain_openai import ChatOpenAI
 
 from database import OrderDatabase, ProductCatalog
-from schema import OrderResponse
+from agents.schemas import OrderAgentResponse
 
 load_dotenv()
 
@@ -301,8 +301,11 @@ class OrderAgent:
         model = ChatOpenAI(model=model_name, temperature=temperature, timeout=timeout)
 
         system_prompt = (
-            "You are a helpful order assistant for an e-commerce store. Your role is to help customers place orders. "
-            "You have access to the full conversation history, so ALWAYS use it to understand context and follow-up responses. "
+            "You are Cecilia, a helpful order assistant for an e-commerce store. Your role is to help "
+            "customers place orders. "
+            "Your name is Cecilia. When asked your name or who you are, say you are Cecilia. "
+            "You have access to the full conversation history, so ALWAYS use it to understand context "
+            "and follow-up responses. "
             "\n\n"
             "CRITICAL: ANTI-HALLUCINATION RULES\n"
             "1. If the user EXPLICITLY provides a Product ID in their message (e.g., 'Buy SPORT-003'), TRUST IT and use it with add_to_cart.\n"
@@ -403,7 +406,7 @@ class OrderAgent:
                 create_order,
             ],
             system_prompt=system_prompt,
-            response_format=OrderResponse,
+            response_format=OrderAgentResponse,
             middleware=[
                 ModelCallLimitMiddleware(
                     run_limit=10,
@@ -430,7 +433,7 @@ class OrderAgent:
 
     def invoke(
         self, user_query: str, chat_history: Optional[List[Dict]] = None
-    ) -> OrderResponse:
+    ) -> OrderAgentResponse:
         """
         Process customer order request.
 
@@ -439,7 +442,7 @@ class OrderAgent:
             chat_history: Optional list of previous messages in conversation
 
         Returns:
-            OrderResponse with structured order status and message
+            OrderAgentResponse with structured order status and message
         """
         logger.info(f"Processing order request: '{user_query}'")
 
@@ -450,7 +453,7 @@ class OrderAgent:
             result = self.agent.invoke({"messages": messages})
         except Exception as e:
             logger.error(f"Error invoking order agent: {e}", exc_info=True)
-            return OrderResponse(
+            return OrderAgentResponse(
                 message="I encountered an error processing your order. Please try again.",
                 status="failed",
                 missing_fields=[],
@@ -463,7 +466,7 @@ class OrderAgent:
                 "Agent did not return a structured response - LLM may have had trouble determining intent"
             )
             # Provide a helpful fallback message that guides the user
-            return OrderResponse(
+            return OrderAgentResponse(
                 message=(
                     "I'm not quite sure what you'd like to do. Could you clarify?\n"
                     "• If you want to order a product, please provide the product ID (e.g., 'TECH-001') and quantity\n"

@@ -10,7 +10,7 @@ from langchain_openai import ChatOpenAI
 
 from agents.order_agent import OrderAgent
 from agents.rag_agent import RAGAgent
-from schema import OrchestratorResponse
+from agents.schemas import OrchestratorResponse
 
 load_dotenv()
 
@@ -169,7 +169,10 @@ class Orchestrator:
         model = ChatOpenAI(model=model_name, temperature=temperature, timeout=timeout)
 
         system_prompt = (
-            "You are a helpful e-commerce assistant that helps customers find and purchase products. "
+            "You are Cecilia, a helpful e-commerce AI shopping assistant that helps customers "
+            "find and purchase products. "
+            "Your name is Cecilia. When asked your name or who you are, say you are Cecilia. "
+            "Never call yourself a generic unnamed AI, ChatGPT, or GPT. "
             "You have two specialized capabilities: "
             "1. search_products - for finding and learning about products in the catalog "
             "2. manage_order - for purchasing products and managing orders "
@@ -194,7 +197,8 @@ class Orchestrator:
             "- Use manage_order ONLY ONCE when users first express intent to buy/purchase/order\n"
             "- Use manage_order when users ask to 'view cart', 'check cart', 'see my items', or 'checkout'\n"
             "- After calling manage_order, DO NOT call it again - the order agent will handle the conversation\n"
-            "- For greetings (hi, hello, hey), respond warmly and ask how you can help with products or orders\n"
+            "- For greetings (hi, hello, hey), respond warmly as Cecilia and ask how you can help with products or orders\n"
+            "- For questions about your name or identity, respond directly as Cecilia without calling any tool\n"
             "\n\n"
             "HANDLING AMBIGUOUS OR UNCLEAR QUERIES:\n"
             "- If the query is ambiguous, unclear, or you cannot determine which agent should handle it, "
@@ -238,6 +242,13 @@ class Orchestrator:
         logger.info(
             f"Orchestrator initialized with model={model_name}, temperature={temperature}, timeout={timeout}s"
         )
+
+    def reset_session(self) -> None:
+        """Reset conversation state: intent mode, empty cart, and internal history."""
+        self._state = OrchestratorState.INTENT
+        self._chat_history.clear()
+        self._cart.clear()
+        logger.info("Orchestrator session reset")
 
     def invoke(
         self, user_query: str, chat_history: Optional[List[Dict]] = None

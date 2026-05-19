@@ -1,4 +1,13 @@
-"""Interactive console for the e-commerce chatbot."""
+"""
+Interactive developer console for Cecilia AI.
+"""
+
+import sys
+from pathlib import Path
+
+_BACKEND_ROOT = Path(__file__).resolve().parents[1]
+if str(_BACKEND_ROOT) not in sys.path:
+    sys.path.insert(0, str(_BACKEND_ROOT))
 
 from database import OrderDatabase, ProductCatalog
 
@@ -7,7 +16,7 @@ products = ProductCatalog()
 
 banner = """
 ╔════════════════════════════════════════════════════════════╗
-║          E-Commerce Chatbot Interactive Console            ║
+║              Cecilia AI — Developer Console                ║
 ╚════════════════════════════════════════════════════════════╝
 
 Available objects:

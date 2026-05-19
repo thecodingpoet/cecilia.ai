@@ -12,6 +12,10 @@ wheels/
 # Environment variables file
 .env
 
+# Frontend
+frontend/node_modules/
+frontend/dist/
+
 # Database files
 data/*.db
 data/*.db-journal
