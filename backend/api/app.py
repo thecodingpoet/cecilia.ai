@@ -7,9 +7,16 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
-from api.schemas import ChatRequest, ChatResponse, HealthResponse, ResetRequest
+from api.schemas import (
+    ChatRequest,
+    ChatResponse,
+    HealthResponse,
+    OrderResponse,
+    OrdersListResponse,
+    ResetRequest,
+)
 from api.session_store import SessionStore
-from database.orders import OrderDatabase, order_to_dict
+from database.orders import OrderDatabase
 
 _REPO_ROOT = Path(__file__).resolve().parents[2]
 _FRONTEND_DIST = _REPO_ROOT / "frontend" / "dist"
@@ -50,12 +57,12 @@ def create_api_app(
     def reset_session(body: ResetRequest) -> None:
         session_store.reset(body.session_id)
 
-    @app.get("/api/orders")
-    def list_orders(limit: int = 100):
+    @app.get("/api/orders", response_model=OrdersListResponse)
+    def list_orders(limit: int = 100) -> OrdersListResponse:
         limit = min(max(limit, 1), 100)
         orders = _ORDERS_DB.get_all_orders(limit=limit)
-        payload = [order_to_dict(o) for o in orders]
-        return {"orders": payload, "count": len(payload)}
+        payload = [OrderResponse.from_order(o) for o in orders]
+        return OrdersListResponse(orders=payload, count=len(payload))
 
     if _FRONTEND_DIST.is_dir() and (_FRONTEND_DIST / "index.html").is_file():
         assets_dir = _FRONTEND_DIST / "assets"
