@@ -1,6 +1,7 @@
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import Zoom from "react-medium-image-zoom";
 import type { Message } from "../hooks/useChat";
 
 interface Props {
@@ -41,12 +42,14 @@ export default function MessageBubble({ message }: Props) {
               className="rounded-xl border border-white/10 bg-[var(--bg-elevated)]/40 p-3"
             >
               {product.image_url && (
-                <img
-                  src={product.image_url}
-                  alt={product.name}
-                  className="h-28 w-full rounded-lg object-cover"
-                  loading="lazy"
-                />
+                <Zoom zoomImg={{ alt: product.name }}>
+                  <img
+                    src={product.image_url}
+                    alt={product.name}
+                    className="h-28 w-full cursor-zoom-in rounded-lg object-cover"
+                    loading="lazy"
+                  />
+                </Zoom>
               )}
               <div className="mt-3">
                 <div className="text-sm font-semibold text-[var(--text-primary)]">
