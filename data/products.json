@@ -5,7 +5,8 @@
     "description": "High-performance laptop with M3 Pro chip, 16GB RAM, 512GB SSD. Perfect for professionals and creators. Features stunning Retina display and all-day battery life.",
     "price": 2499.99,
     "category": "Electronics",
-    "stock_status": "in_stock"
+    "stock_status": "in_stock",
+    "image_url": "https://placehold.co/800x600?text=MacBook+Pro+16-inch"
   },
   {
     "product_id": "TECH-002",
@@ -13,7 +14,8 @@
     "description": "Latest smartphone with A17 Pro chip, 256GB storage, titanium design. Advanced camera system with 48MP main camera. 5G enabled.",
     "price": 1199.99,
     "category": "Electronics",
-    "stock_status": "out_of_stock"
+    "stock_status": "out_of_stock",
+    "image_url": "https://placehold.co/800x600?text=iPhone+15+Pro"
   },
   {
     "product_id": "TECH-003",
@@ -21,7 +23,8 @@
     "description": "Premium wireless earbuds with active noise cancellation, spatial audio, and adaptive transparency. Up to 6 hours listening time.",
     "price": 249.99,
     "category": "Electronics",
-    "stock_status": "in_stock"
+    "stock_status": "in_stock",
+    "image_url": "https://placehold.co/800x600?text=AirPods+Pro+2nd+Gen"
   },
   {
     "product_id": "TECH-004",
@@ -29,7 +32,8 @@
     "description": "Versatile tablet with M2 chip, 128GB storage. Perfect for work and entertainment. Supports Apple Pencil and Magic Keyboard.",
     "price": 599.99,
     "category": "Electronics",
-    "stock_status": "out_of_stock"
+    "stock_status": "out_of_stock",
+    "image_url": "https://placehold.co/800x600?text=iPad+Air+11-inch"
   },
   {
     "product_id": "TECH-005",
@@ -37,7 +41,8 @@
     "description": "Industry-leading noise canceling wireless headphones with exceptional sound quality. 30-hour battery life and multipoint connection.",
     "price": 399.99,
     "category": "Electronics",
-    "stock_status": "in_stock"
+    "stock_status": "in_stock",
+    "image_url": "https://placehold.co/800x600?text=Sony+WH-1000XM5+Headphones"
   },
   {
     "product_id": "TECH-006",
@@ -45,7 +50,8 @@
     "description": "Crystal UHD 4K television with HDR, smart hub, and voice assistant integration. Perfect for streaming and gaming.",
     "price": 899.99,
     "category": "Electronics",
-    "stock_status": "in_stock"
+    "stock_status": "in_stock",
+    "image_url": "https://placehold.co/800x600?text=Samsung+65-inch+4K+Smart+TV"
   },
   {
     "product_id": "TECH-007",
@@ -53,7 +59,8 @@
     "description": "Ultra-portable laptop with Intel Core i7, 16GB RAM, 512GB SSD. 13.4-inch InfinityEdge display. Ideal for business and travel.",
     "price": 1299.99,
     "category": "Electronics",
-    "stock_status": "in_stock"
+    "stock_status": "in_stock",
+    "image_url": "https://placehold.co/800x600?text=Dell+XPS+13+Laptop"
   },
   {
     "product_id": "TECH-008",
@@ -61,7 +68,8 @@
     "description": "Professional mirrorless camera with 20MP full-frame sensor, 4K video, and advanced autofocus. Perfect for photography enthusiasts.",
     "price": 2499.99,
     "category": "Electronics",
-    "stock_status": "low_stock"
+    "stock_status": "low_stock",
+    "image_url": "https://placehold.co/800x600?text=Canon+EOS+R6+Camera"
   },
   {
     "product_id": "TECH-009",
@@ -69,7 +77,8 @@
     "description": "Ergonomic wireless mouse with customizable buttons, quiet clicks, and precision tracking. Works on any surface.",
     "price": 99.99,
     "category": "Electronics",
-    "stock_status": "in_stock"
+    "stock_status": "in_stock",
+    "image_url": "https://placehold.co/800x600?text=Logitech+MX+Master+3S+Mouse"
   },
   {
     "product_id": "TECH-010",
@@ -77,7 +86,8 @@
     "description": "Next-gen gaming console with ultra-fast SSD, haptic feedback controller, and stunning graphics. Includes 825GB storage.",
     "price": 499.99,
     "category": "Electronics",
-    "stock_status": "low_stock"
+    "stock_status": "low_stock",
+    "image_url": "https://placehold.co/800x600?text=PlayStation+5+Console"
   },
   {
     "product_id": "HOME-001",
@@ -85,7 +95,8 @@
     "description": "Powerful cordless vacuum with laser detection, HEPA filtration, and up to 60 minutes runtime. Perfect for deep cleaning.",
     "price": 649.99,
     "category": "Home & Kitchen",
-    "stock_status": "in_stock"
+    "stock_status": "in_stock",
+    "image_url": "https://placehold.co/800x600?text=Dyson+V15+Vacuum+Cleaner"
   },
   {
     "product_id": "HOME-002",
@@ -93,7 +104,8 @@
     "description": "6-quart air fryer with rapid cooking technology. Cook healthy meals with little to no oil. 7 cooking functions.",
     "price": 129.99,
     "category": "Home & Kitchen",
-    "stock_status": "in_stock"
+    "stock_status": "in_stock",
+    "image_url": "https://placehold.co/800x600?text=Ninja+Air+Fryer"
   },
   {
     "product_id": "HOME-003",
@@ -101,7 +113,8 @@
     "description": "Single-serve coffee maker with iced coffee capability, 5 cup sizes, and strong brew setting. Compatible with all K-Cup pods.",
     "price": 169.99,
     "category": "Home & Kitchen",
-    "stock_status": "in_stock"
+    "stock_status": "in_stock",
+    "image_url": "https://placehold.co/800x600?text=Keurig+K-Elite+Coffee+Maker"
   },
   {
     "product_id": "HOME-004",
@@ -109,7 +122,8 @@
     "description": "Smart robot vacuum with automatic dirt disposal, obstacle avoidance, and app control. Maps your home for efficient cleaning.",
     "price": 799.99,
     "category": "Home & Kitchen",
-    "stock_status": "out_of_stock"
+    "stock_status": "out_of_stock",
+    "image_url": "https://placehold.co/800x600?text=iRobot+Roomba+j7+"
   },
   {
     "product_id": "HOME-005",
@@ -117,7 +131,8 @@
     "description": "Multi-cooker with pressure cooker, slow cooker, rice cooker, steamer, and more. 6-quart capacity for families.",
     "price": 99.99,
     "category": "Home & Kitchen",
-    "stock_status": "in_stock"
+    "stock_status": "in_stock",
+    "image_url": "https://placehold.co/800x600?text=Instant+Pot+Duo+7-in-1"
   },
   {
     "product_id": "HOME-006",
@@ -125,7 +140,8 @@
     "description": "Smart LED light bulbs with hub, app control, and voice assistant integration. 16 million colors and scheduling features.",
     "price": 199.99,
     "category": "Home & Kitchen",
-    "stock_status": "in_stock"
+    "stock_status": "in_stock",
+    "image_url": "https://placehold.co/800x600?text=Philips+Hue+Starter+Kit"
   },
   {
     "product_id": "HOME-007",
@@ -133,7 +149,8 @@
     "description": "5-quart tilt-head stand mixer with 10 speeds. Includes dough hook, whisk, and beater. Perfect for baking enthusiasts.",
     "price": 379.99,
     "category": "Home & Kitchen",
-    "stock_status": "in_stock"
+    "stock_status": "in_stock",
+    "image_url": "https://placehold.co/800x600?text=KitchenAid+Stand+Mixer"
   },
   {
     "product_id": "HOME-008",
@@ -141,7 +158,8 @@
     "description": "Smart thermostat that learns your schedule and saves energy. Control from anywhere with smartphone app.",
     "price": 249.99,
     "category": "Home & Kitchen",
-    "stock_status": "in_stock"
+    "stock_status": "in_stock",
+    "image_url": "https://placehold.co/800x600?text=Nest+Learning+Thermostat"
   },
   {
     "product_id": "FURN-001",
@@ -149,7 +167,8 @@
     "description": "Ergonomic office chair with adjustable lumbar support, breathable mesh, and 12-year warranty. Size B (medium).",
     "price": 1495.0,
     "category": "Furniture",
-    "stock_status": "out_of_stock"
+    "stock_status": "out_of_stock",
+    "image_url": "https://placehold.co/800x600?text=Herman+Miller+Aeron+Chair"
   },
   {
     "product_id": "FURN-002",
@@ -157,7 +176,8 @@
     "description": "Height-adjustable standing desk with memory presets, 48x30 inch surface, and cable management. Supports up to 300 lbs.",
     "price": 499.99,
     "category": "Furniture",
-    "stock_status": "in_stock"
+    "stock_status": "in_stock",
+    "image_url": "https://placehold.co/800x600?text=Standing+Desk+Electric"
   },
   {
     "product_id": "FURN-003",
@@ -165,7 +185,8 @@
     "description": "Contemporary fabric sofa with deep cushions and solid wood frame. Available in gray. Comfortable for everyday use.",
     "price": 899.99,
     "category": "Furniture",
-    "stock_status": "in_stock"
+    "stock_status": "in_stock",
+    "image_url": "https://placehold.co/800x600?text=Modern+Sofa+3-Seater"
   },
   {
     "product_id": "FURN-004",
@@ -173,7 +194,8 @@
     "description": "Upholstered platform bed frame with tufted headboard. No box spring needed. Easy assembly with included tools.",
     "price": 349.99,
     "category": "Furniture",
-    "stock_status": "in_stock"
+    "stock_status": "in_stock",
+    "image_url": "https://placehold.co/800x600?text=Queen+Size+Bed+Frame"
   },
   {
     "product_id": "SPORT-001",
@@ -181,7 +203,8 @@
     "description": "Premium indoor cycling bike with rotating touchscreen, auto-follow resistance, and access to live classes. Includes 3-month membership.",
     "price": 2495.0,
     "category": "Sports & Fitness",
-    "stock_status": "out_of_stock"
+    "stock_status": "out_of_stock",
+    "image_url": "https://placehold.co/800x600?text=Peloton+Bike+"
   },
   {
     "product_id": "SPORT-002",
@@ -189,7 +212,8 @@
     "description": "Space-saving dumbbells that adjust from 5 to 52.5 lbs per hand. Replaces 15 sets of weights. Perfect for home gym.",
     "price": 399.99,
     "category": "Sports & Fitness",
-    "stock_status": "in_stock"
+    "stock_status": "in_stock",
+    "image_url": "https://placehold.co/800x600?text=Bowflex+Adjustable+Dumbbells"
   },
   {
     "product_id": "SPORT-003",
@@ -197,7 +221,8 @@
     "description": "Extra-thick 6mm yoga mat with non-slip surface and carrying strap. Made from eco-friendly TPE material. 72x24 inches.",
     "price": 39.99,
     "category": "Sports & Fitness",
-    "stock_status": "in_stock"
+    "stock_status": "in_stock",
+    "image_url": "https://placehold.co/800x600?text=Yoga+Mat+Premium"
   },
   {
     "product_id": "SPORT-004",
@@ -205,7 +230,8 @@
     "description": "Advanced fitness tracker with heart rate monitor, GPS, sleep tracking, and 7-day battery life. Water resistant to 50m.",
     "price": 159.99,
     "category": "Sports & Fitness",
-    "stock_status": "in_stock"
+    "stock_status": "in_stock",
+    "image_url": "https://placehold.co/800x600?text=Fitbit+Charge+6"
   },
   {
     "product_id": "BOOK-001",
@@ -213,7 +239,8 @@
     "description": "Waterproof e-reader with 6.8-inch glare-free display, adjustable warm light, and weeks of battery life. 16GB storage.",
     "price": 149.99,
     "category": "Books & Media",
-    "stock_status": "in_stock"
+    "stock_status": "in_stock",
+    "image_url": "https://placehold.co/800x600?text=Kindle+Paperwhite"
   },
   {
     "product_id": "BOOK-002",
@@ -221,7 +248,8 @@
     "description": "Portable Bluetooth speaker with deep bass, 12-hour battery, and water-resistant design. Perfect for outdoor use.",
     "price": 179.99,
     "category": "Books & Media",
-    "stock_status": "in_stock"
+    "stock_status": "in_stock",
+    "image_url": "https://placehold.co/800x600?text=Bose+SoundLink+Speaker"
   },
   {
     "product_id": "ACCS-001",
@@ -229,7 +257,8 @@
     "description": "Hardside spinner suitcase with TSA lock, expandable capacity, and 10-year warranty. Lightweight and durable.",
     "price": 199.99,
     "category": "Accessories",
-    "stock_status": "in_stock"
+    "stock_status": "in_stock",
+    "image_url": "https://placehold.co/800x600?text=Samsonite+Carry-On+Luggage"
   },
   {
     "product_id": "ACCS-002",
@@ -237,7 +266,8 @@
     "description": "Classic metal frame sunglasses with polarized lenses and UV protection. Iconic style and superior clarity.",
     "price": 179.99,
     "category": "Accessories",
-    "stock_status": "in_stock"
+    "stock_status": "in_stock",
+    "image_url": "https://placehold.co/800x600?text=Ray-Ban+Aviator+Sunglasses"
   },
   {
     "product_id": "ACCS-003",
@@ -245,7 +275,8 @@
     "description": "Professional backpack with padded laptop compartment (fits up to 15.6 inch), USB charging port, and water-resistant leather.",
     "price": 89.99,
     "category": "Accessories",
-    "stock_status": "in_stock"
+    "stock_status": "in_stock",
+    "image_url": "https://placehold.co/800x600?text=Leather+Laptop+Backpack"
   },
   {
     "product_id": "ACCS-004",
@@ -253,7 +284,8 @@
     "description": "High-capacity portable charger with fast charging, dual USB ports, and LED display. Can charge phone 4-5 times.",
     "price": 49.99,
     "category": "Accessories",
-    "stock_status": "in_stock"
+    "stock_status": "in_stock",
+    "image_url": "https://placehold.co/800x600?text=Anker+PowerBank+20000mAh"
   },
   {
     "product_id": "GAME-001",
@@ -261,7 +293,8 @@
     "description": "Gaming console with vibrant 7-inch OLED screen, enhanced audio, and 64GB storage. Play at home or on the go.",
     "price": 349.99,
     "category": "Electronics",
-    "stock_status": "in_stock"
+    "stock_status": "in_stock",
+    "image_url": "https://placehold.co/800x600?text=Nintendo+Switch+OLED"
   },
   {
     "product_id": "GAME-002",
@@ -269,7 +302,8 @@
     "description": "Powerful gaming console with 4K gaming, 1TB SSD, and backwards compatibility. Includes Xbox Game Pass trial.",
     "price": 499.99,
     "category": "Electronics",
-    "stock_status": "low_stock"
+    "stock_status": "low_stock",
+    "image_url": "https://placehold.co/800x600?text=Xbox+Series+X"
   },
   {
     "product_id": "WEAR-001",
@@ -277,6 +311,7 @@
     "description": "Advanced smartwatch with fitness tracking, ECG, blood oxygen monitoring, and always-on display. 41mm GPS model.",
     "price": 429.99,
     "category": "Electronics",
-    "stock_status": "in_stock"
+    "stock_status": "in_stock",
+    "image_url": "https://placehold.co/800x600?text=Apple+Watch+Series+9"
   }
 ]

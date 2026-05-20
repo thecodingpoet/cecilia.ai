@@ -2,6 +2,8 @@
 
 from datetime import datetime
 
+from typing import Optional
+
 from pydantic import BaseModel, Field
 
 from database.orders import Order
@@ -11,6 +13,16 @@ def _dt_iso(dt: datetime) -> str:
     return dt.isoformat() + "Z"
 
 
+class ProductResponse(BaseModel):
+    product_id: str
+    name: str
+    description: str
+    price: float
+    category: str
+    stock_status: str
+    image_url: Optional[str] = None
+
+
 class ChatRequest(BaseModel):
     session_id: str = Field(min_length=1)
     message: str = Field(min_length=1)
@@ -18,6 +30,7 @@ class ChatRequest(BaseModel):
 
 class ChatResponse(BaseModel):
     reply: str
+    products: list[ProductResponse] = Field(default_factory=list)
 
 
 class ResetRequest(BaseModel):

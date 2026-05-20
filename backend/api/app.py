@@ -13,6 +13,7 @@ from api.schemas import (
     HealthResponse,
     OrderResponse,
     OrdersListResponse,
+    ProductResponse,
     ResetRequest,
 )
 from api.session_store import SessionStore
@@ -50,8 +51,20 @@ def create_api_app(
         if not message:
             raise HTTPException(status_code=400, detail="Message cannot be empty")
         service = session_store.get(body.session_id)
-        reply = service.send(message)
-        return ChatResponse(reply=reply)
+        response = service.send(message)
+        products = [
+            ProductResponse(
+                product_id=product.product_id,
+                name=product.name,
+                description=product.description,
+                price=product.price,
+                category=product.category,
+                stock_status=product.stock_status,
+                image_url=product.image_url,
+            )
+            for product in response.products
+        ]
+        return ChatResponse(reply=response.message, products=products)
 
     @app.post("/api/session/reset", status_code=204)
     def reset_session(body: ResetRequest) -> None:

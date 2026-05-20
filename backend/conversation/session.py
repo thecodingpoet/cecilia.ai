@@ -9,13 +9,14 @@ import logging
 from typing import List, Protocol
 
 from agents.orchestrator import Orchestrator
+from agents.schemas import OrchestratorResponse
 
 
 class ChatService(Protocol):
     """Minimal conversation contract for HTTP clients and tests."""
 
-    def send(self, message: str) -> str:
-        """Send a user message and return the assistant reply."""
+    def send(self, message: str) -> OrchestratorResponse:
+        """Send a user message and return the assistant response."""
         ...
 
     def reset(self) -> None:
@@ -38,9 +39,13 @@ class ChatSession:
         self._verbose = verbose
         self._history: List[dict] = []
 
-    def send(self, message: str) -> str:
+    def send(self, message: str) -> OrchestratorResponse:
         if not message.strip():
-            return ""
+            return OrchestratorResponse(
+                message="",
+                agent_used="orchestrator",
+                products=[],
+            )
 
         try:
             self._logger.debug(
@@ -56,15 +61,19 @@ class ChatSession:
             self._history.append({"role": "user", "content": message})
             self._history.append({"role": "assistant", "content": reply})
 
-            return reply
+            return response
 
         except Exception as e:
             self._logger.error(f"Error: {e}")
             if self._verbose:
                 self._logger.exception("Full traceback:")
-            return (
-                "Something went wrong while processing your request. "
-                f"Details: {e}\n\nPlease try again."
+            return OrchestratorResponse(
+                message=(
+                    "Something went wrong while processing your request. "
+                    f"Details: {e}\n\nPlease try again."
+                ),
+                agent_used="orchestrator",
+                products=[],
             )
 
     def reset(self) -> None:
