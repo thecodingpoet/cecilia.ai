@@ -3,6 +3,7 @@ export const APP_NAME = "Cecilia AI";
 export const APP_TAGLINE = "Your AI shopping assistant";
 export const ASSISTANT_GREETING = "Hi, I'm Cecilia.";
 export const LOGO_SRC = "/cecilia-logo.png";
+export const LOGO_ICON_SRC = "/cecilia-icon.png";
 export const LOGO_ALT = "Cecilia";
 export const ASSISTANT_INTRO =
   "I can help you discover products, compare options, and shop effortlessly. Just chat naturally.";

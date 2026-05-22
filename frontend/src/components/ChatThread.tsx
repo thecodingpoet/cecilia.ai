@@ -28,7 +28,7 @@ export default function ChatThread({
   }
 
   return (
-    <div className="flex flex-1 flex-col gap-6 overflow-y-auto px-4 py-6 sm:px-6">
+    <div className="flex min-w-0 flex-1 flex-col gap-4 overflow-y-auto px-3 py-4 sm:gap-6 sm:px-6 sm:py-6">
       {messages.map((msg) => (
         <MessageBubble key={msg.id} message={msg} />
       ))}

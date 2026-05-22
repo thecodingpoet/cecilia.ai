@@ -27,13 +27,13 @@ export default function OrdersPage() {
   }, []);
 
   return (
-    <main className="mx-auto flex w-full min-h-0 max-w-[var(--max-content-width)] flex-1 flex-col overflow-y-auto px-4 py-6 sm:px-6">
+    <main className="mx-auto flex min-h-0 w-full max-w-[var(--max-content-width)] flex-1 flex-col overflow-y-auto px-3 py-4 sm:px-6 sm:py-6">
       <div
-        className="animate-reveal-up mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between"
+        className="animate-reveal-up mb-5 flex flex-col gap-4 sm:mb-6 sm:flex-row sm:items-end sm:justify-between"
         style={staggerDelay(0, 0, 40)}
       >
         <div>
-          <h1 className="font-display text-2xl font-semibold tracking-tight">
+          <h1 className="font-display text-[1.65rem] font-semibold tracking-tight sm:text-2xl">
             {ORDERS_PAGE_TITLE}
           </h1>
           {!loading && !error && (
@@ -52,7 +52,7 @@ export default function OrdersPage() {
           type="button"
           onClick={() => void refresh()}
           disabled={loading}
-          className="shrink-0 self-start rounded-lg border px-3 py-1.5 text-sm transition-colors hover:bg-[var(--bg-elevated)] disabled:opacity-40 sm:self-auto"
+          className="w-full shrink-0 rounded-lg border px-3 py-2 text-sm transition-colors hover:bg-[var(--bg-elevated)] disabled:opacity-40 sm:w-auto sm:self-auto sm:py-1.5"
           style={{ borderColor: "var(--border-subtle)" }}
         >
           Refresh

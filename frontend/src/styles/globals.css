@@ -32,10 +32,23 @@ body {
   background: var(--bg-app);
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
+  overflow: hidden;
 }
 
 .font-display {
   font-family: "Fraunces", Georgia, serif;
+}
+
+.app-root {
+  height: 100%;
+  min-height: 100%;
+}
+
+@supports (height: 100dvh) {
+  .app-root {
+    height: 100dvh;
+    min-height: 100dvh;
+  }
 }
 
 /* Subtle ambient gradient — unique shell vs flat ChatGPT */
@@ -246,9 +259,11 @@ body {
 }
 
 .prose-chat {
+  min-width: 0;
   font-size: 0.9375rem;
   line-height: 1.65;
   color: var(--text-primary);
+  overflow-wrap: anywhere;
 }
 
 .prose-chat p {
@@ -280,6 +295,7 @@ body {
   background: var(--bg-elevated);
   padding: 0.75em 1em;
   border-radius: 8px;
+  max-width: 100%;
   overflow-x: auto;
   margin: 0.5em 0;
   border: 1px solid var(--border-subtle);

@@ -8,7 +8,7 @@ interface Props {
 }
 
 const navLinkClass = ({ isActive }: { isActive: boolean }) =>
-  `rounded-md px-2.5 py-1 text-sm font-medium transition-colors ${
+  `rounded-md px-2 py-1 text-sm font-medium transition-colors sm:px-2.5 ${
     isActive ? "" : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
   }`;
 
@@ -37,17 +37,22 @@ export default function AppHeader({
       }}
     >
       <div
-        className="mx-auto flex max-w-[var(--header-max-width)] items-center justify-between gap-3 px-4 py-1.5 sm:px-5"
+        className="mx-auto flex max-w-[var(--header-max-width)] items-center justify-between gap-2 px-3 py-1.5 sm:gap-3 sm:px-5 sm:py-2"
       >
         <Link
           to="/"
           className="flex shrink-0 items-center leading-none"
           aria-label="Cecilia home"
         >
-          <CeciliaLogo size="header" />
+          <span className="sm:hidden">
+            <CeciliaLogo variant="icon" />
+          </span>
+          <span className="hidden sm:block">
+            <CeciliaLogo variant="wordmark" size="header" />
+          </span>
         </Link>
 
-        <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+        <div className="flex min-w-0 flex-1 items-center justify-end gap-1.5 sm:shrink-0 sm:flex-none sm:gap-3">
           <nav
             className="flex items-center gap-1"
             aria-label="Main"
@@ -65,10 +70,11 @@ export default function AppHeader({
               type="button"
               onClick={onClear}
               disabled={clearDisabled}
-              className="shrink-0 rounded-md border px-2.5 py-1 text-sm transition-colors hover:bg-[var(--bg-elevated)] disabled:opacity-40"
+              className="shrink-0 rounded-md border px-2 py-1 text-sm transition-colors hover:bg-[var(--bg-elevated)] disabled:opacity-40 sm:px-2.5"
               style={{ borderColor: "var(--border-subtle)" }}
             >
-              Clear chat
+              <span className="sm:hidden">Clear</span>
+              <span className="hidden sm:inline">Clear chat</span>
             </button>
           )}
         </div>

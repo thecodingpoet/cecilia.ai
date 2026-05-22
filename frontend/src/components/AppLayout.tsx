@@ -22,7 +22,7 @@ export default function AppLayout() {
   const handleClearCancel = () => setConfirmClear(false);
 
   return (
-    <div className="app-bg app-bg--live flex h-full flex-col">
+    <div className="app-bg app-bg--live flex h-full min-w-0 flex-col overflow-hidden">
       <AppHeader
         showClear={isChat && hasMessages}
         onClear={handleClear}
@@ -60,11 +60,14 @@ export default function AppLayout() {
         </div>
       )}
 
-      <div key={pathname} className="flex min-h-0 flex-1 flex-col animate-page-enter">
+      <div
+        key={pathname}
+        className="flex min-h-0 min-w-0 flex-1 flex-col animate-page-enter"
+      >
         <Outlet />
       </div>
 
-      <footer className="shrink-0 py-2 text-center text-xs text-[var(--text-muted)]">
+      <footer className="hidden shrink-0 py-2 text-center text-xs text-[var(--text-muted)] sm:block">
         Cecilia AI · {new Date().getFullYear()} 
       </footer>
     </div>

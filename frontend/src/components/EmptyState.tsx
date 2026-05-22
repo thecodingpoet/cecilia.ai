@@ -12,9 +12,9 @@ interface Props {
 
 export default function EmptyState({ onSelect }: Props) {
   return (
-    <div className="flex flex-1 flex-col items-center justify-center px-4 py-12 text-center">
+    <div className="flex min-w-0 flex-1 flex-col items-center justify-center overflow-y-auto px-3 py-8 text-center sm:px-4 sm:py-12">
       <h1
-        className="font-display animate-reveal-up mb-2 text-2xl font-semibold tracking-tight sm:text-3xl"
+        className="font-display animate-reveal-up mb-2 text-[1.65rem] font-semibold tracking-tight sm:text-3xl"
         style={staggerDelay(1, 55, 120)}
       >
         {ASSISTANT_GREETING}
@@ -26,7 +26,7 @@ export default function EmptyState({ onSelect }: Props) {
         {APP_TAGLINE}
       </p>
       <p
-        className="animate-reveal-up mb-8 max-w-md text-[0.9375rem] leading-relaxed text-[var(--text-muted)]"
+        className="animate-reveal-up mb-6 max-w-md text-[0.9375rem] leading-relaxed text-[var(--text-muted)] sm:mb-8"
         style={staggerDelay(3, 55, 120)}
       >
         {ASSISTANT_INTRO}
@@ -43,7 +43,7 @@ export default function EmptyState({ onSelect }: Props) {
             key={prompt}
             type="button"
             onClick={() => onSelect(prompt)}
-            className="starter-chip animate-chip rounded-xl border px-4 py-3 text-left text-sm"
+            className="starter-chip animate-chip rounded-xl border px-3.5 py-3 text-left text-sm sm:px-4"
             style={staggerDelay(i, 50, 380)}
           >
             {prompt}
