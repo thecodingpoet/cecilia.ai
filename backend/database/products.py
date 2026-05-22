@@ -158,6 +158,7 @@ class ProductVectorStore:
                 "category": product["category"],
                 "stock_status": product["stock_status"],
                 "description": product["description"],
+                "image_url": product.get("image_url"),
             }
 
             doc = Document(

@@ -107,9 +107,7 @@ class RAGAgent:
                 price = product["price"]
                 stock = format_stock_status(product["stock_status"])
                 description = product["description"]
-
                 logger.info(f"Exact product match found: {pid}")
-
                 return (
                     f"**{name}** (ID: {pid})\n"
                     f"Price: ${price:.2f} | Stock: {stock}\n"
@@ -247,6 +245,11 @@ class RAGAgent:
                 ),
                 products=[],
             )
+
+        for product in structured_response.products:
+            catalog_item = self.product_catalog.get_product(product.product_id)
+            if catalog_item:
+                product.image_url = catalog_item.get("image_url")
 
         logger.info(
             f"Successfully answered query with {len(structured_response.products)} products"

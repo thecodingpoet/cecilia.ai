@@ -87,6 +87,7 @@ class Orchestrator:
         self._chat_history = []
         self._state = OrchestratorState.INTENT
         self._cart = []
+        self._last_products = []
 
         self.rag_agent = RAGAgent(
             model_name=model_name, temperature=temperature, timeout=timeout
@@ -120,6 +121,7 @@ class Orchestrator:
             result = self.rag_agent.invoke(
                 request, chat_history=self._truncate_history()
             )
+            self._last_products = result.products
 
             return self._append_product_details(result.message, result.products)
 
@@ -248,6 +250,7 @@ class Orchestrator:
         self._state = OrchestratorState.INTENT
         self._chat_history.clear()
         self._cart.clear()
+        self._last_products = []
         logger.info("Orchestrator session reset")
 
     def invoke(
@@ -306,7 +309,9 @@ class Orchestrator:
                         "RAG agent bounced back (not a search query). Returning order agent transition message."
                     )
                     return OrchestratorResponse(
-                        message=result.message, agent_used="order"
+                        message=result.message,
+                        agent_used="order",
+                        products=[],
                     )
 
                 # Append product details to message to preserve IDs in history
@@ -314,9 +319,17 @@ class Orchestrator:
                     rag_result.message, rag_result.products
                 )
 
-                return OrchestratorResponse(message=final_message, agent_used="rag")
+                return OrchestratorResponse(
+                    message=final_message,
+                    agent_used="rag",
+                    products=rag_result.products,
+                )
 
-        return OrchestratorResponse(message=result.message, agent_used="order")
+        return OrchestratorResponse(
+            message=result.message,
+            agent_used="order",
+            products=[],
+        )
 
     def _handle_intent_mode(self, user_query: str) -> OrchestratorResponse:
         """
@@ -355,9 +368,14 @@ class Orchestrator:
                     "Please provide more details about what you'd like to do!"
                 ),
                 agent_used="orchestrator",
+                products=[],
             )
 
         logger.info(f"Agent used: {structured_response.agent_used}")
+        if structured_response.agent_used == "rag":
+            structured_response.products = self._last_products
+        else:
+            structured_response.products = []
         return structured_response
 
     def _append_product_details(self, message: str, products: List) -> str:

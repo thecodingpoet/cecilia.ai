@@ -7,12 +7,13 @@ import {
 } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { loadSessionId, saveSessionId } from "../lib/brand";
-import { resetSession, sendMessage } from "../api/client";
+import { resetSession, sendMessage, type Product } from "../api/client";
 
 export interface Message {
   id: string;
   role: "user" | "assistant";
   content: string;
+  products?: Product[];
 }
 
 function getOrCreateSessionId(): string {
@@ -58,7 +59,12 @@ function useChatState(): ChatContextValue {
         const reply = await sendMessage(sessionId, trimmed);
         setMessages((prev) => [
           ...prev,
-          { id: uuidv4(), role: "assistant", content: reply },
+          {
+            id: uuidv4(),
+            role: "assistant",
+            content: reply.reply,
+            products: reply.products,
+          },
         ]);
       } catch (e) {
         setError(e instanceof Error ? e.message : "Something went wrong");

@@ -403,3 +403,9 @@ body {
   border: 1px solid var(--border-subtle);
   box-shadow: 0 1px 0 rgba(212, 165, 116, 0.06);
 }
+
+/* react-medium-image-zoom: dark translucent overlay (not default white) */
+[data-rmiz-modal-overlay="visible"] {
+  background-color: rgba(18, 16, 26, 0.82);
+  backdrop-filter: blur(6px);
+}

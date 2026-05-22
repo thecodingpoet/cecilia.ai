@@ -1,7 +1,22 @@
+export interface Product {
+  product_id: string;
+  name: string;
+  description: string;
+  price: number;
+  category: string;
+  stock_status: string;
+  image_url?: string | null;
+}
+
+export interface ChatReply {
+  reply: string;
+  products: Product[];
+}
+
 export async function sendMessage(
   sessionId: string,
   message: string
-): Promise<string> {
+): Promise<ChatReply> {
   const res = await fetch("/api/chat", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -13,8 +28,7 @@ export async function sendMessage(
       (err as { detail?: string }).detail ?? `Request failed (${res.status})`
     );
   }
-  const data = (await res.json()) as { reply: string };
-  return data.reply;
+  return (await res.json()) as ChatReply;
 }
 
 export async function resetSession(sessionId: string): Promise<void> {
@@ -57,7 +71,7 @@ function apiErrorMessage(
   fallback: string
 ): string {
   if (res.status === 404) {
-    return "Orders API not found. Restart the backend (uv run backend/main.py --ui).";
+    return "Orders API not found. Restart the backend (uv run python src/main.py --ui).";
   }
   return err.detail ?? `${fallback} (${res.status})`;
 }

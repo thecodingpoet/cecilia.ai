@@ -1,6 +1,7 @@
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import Zoom from "react-medium-image-zoom";
 import type { Message } from "../hooks/useChat";
 
 interface Props {
@@ -33,6 +34,35 @@ export default function MessageBubble({ message }: Props) {
           {message.content}
         </ReactMarkdown>
       </div>
+      {message.products && message.products.length > 0 && (
+        <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          {message.products.map((product) => (
+            <div
+              key={product.product_id}
+              className="rounded-xl border border-white/10 bg-[var(--bg-elevated)]/40 p-3"
+            >
+              {product.image_url && (
+                <Zoom zoomImg={{ alt: product.name }}>
+                  <img
+                    src={product.image_url}
+                    alt={product.name}
+                    className="h-28 w-full cursor-zoom-in rounded-lg object-cover"
+                    loading="lazy"
+                  />
+                </Zoom>
+              )}
+              <div className="mt-3">
+                <div className="text-sm font-semibold text-[var(--text-primary)]">
+                  {product.name}
+                </div>
+                <div className="text-xs text-[var(--text-muted)]">
+                  ${product.price.toFixed(2)}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
       <button
         type="button"
         onClick={handleCopy}
