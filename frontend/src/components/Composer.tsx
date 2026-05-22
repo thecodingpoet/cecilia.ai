@@ -42,8 +42,11 @@ export default function Composer({ onSend, loading }: Props) {
 
   return (
     <div
-      className="animate-composer-enter border-t px-4 py-4 sm:px-6"
-      style={{ borderColor: "var(--border-subtle)" }}
+      className="animate-composer-enter border-t px-3 py-3 sm:px-6 sm:py-4"
+      style={{
+        borderColor: "var(--border-subtle)",
+        paddingBottom: "max(1rem, env(safe-area-inset-bottom))",
+      }}
     >
       <div
         className="mx-auto flex max-w-[var(--max-chat-width)] items-end gap-2 rounded-2xl border px-3 py-2"
@@ -60,13 +63,13 @@ export default function Composer({ onSend, loading }: Props) {
           onInput={resize}
           onKeyDown={handleKeyDown}
           aria-busy={loading}
-          className="max-h-36 min-h-[24px] flex-1 resize-none bg-transparent py-1.5 text-[0.9375rem] outline-none placeholder:text-[var(--text-muted)] disabled:opacity-50"
+          className="max-h-36 min-h-[24px] min-w-0 flex-1 resize-none bg-transparent py-1.5 text-base outline-none placeholder:text-[var(--text-muted)] disabled:opacity-50 sm:text-[0.9375rem]"
         />
         <button
           type="button"
           onClick={handleSubmit}
           disabled={loading}
-          className="shrink-0 rounded-lg px-4 py-2 text-sm font-medium text-white transition-colors disabled:opacity-40"
+          className="shrink-0 rounded-lg px-3 py-2 text-sm font-medium text-white transition-colors disabled:opacity-40 sm:px-4"
           style={{
             background: loading ? "var(--border-subtle)" : "var(--accent)",
           }}

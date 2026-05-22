@@ -6,7 +6,7 @@ import OrdersPage from "./pages/OrdersPage";
 
 export default function App() {
   return (
-    <div className="h-full app-shell-enter">
+    <div className="app-root app-shell-enter">
       <BrowserRouter>
         <ChatProvider>
           <Routes>

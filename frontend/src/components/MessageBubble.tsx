@@ -20,7 +20,7 @@ export default function MessageBubble({ message }: Props) {
   if (message.role === "user") {
     return (
       <div className="message-enter flex justify-end">
-        <div className="user-bubble max-w-[85%] rounded-2xl px-4 py-2.5 text-[0.9375rem] leading-relaxed">
+        <div className="user-bubble max-w-[92%] rounded-2xl px-3.5 py-2.5 text-[0.9375rem] leading-relaxed [overflow-wrap:anywhere] sm:max-w-[85%] sm:px-4">
           {message.content}
         </div>
       </div>
@@ -29,7 +29,7 @@ export default function MessageBubble({ message }: Props) {
 
   return (
     <div className="message-enter group relative">
-      <div className="prose-chat">
+      <div className="prose-chat max-w-full">
         <ReactMarkdown remarkPlugins={[remarkGfm]}>
           {message.content}
         </ReactMarkdown>
@@ -46,7 +46,7 @@ export default function MessageBubble({ message }: Props) {
                   <img
                     src={product.image_url}
                     alt={product.name}
-                    className="h-28 w-full cursor-zoom-in rounded-lg object-cover"
+                    className="h-32 w-full cursor-zoom-in rounded-lg object-cover sm:h-28"
                     loading="lazy"
                   />
                 </Zoom>
@@ -66,7 +66,7 @@ export default function MessageBubble({ message }: Props) {
       <button
         type="button"
         onClick={handleCopy}
-        className="mt-1 rounded-md px-2 py-1 text-xs text-[var(--text-muted)] opacity-0 transition-opacity hover:bg-[var(--bg-elevated)] hover:text-[var(--text-primary)] group-hover:opacity-100"
+        className="mt-1 rounded-md px-2 py-1 text-xs text-[var(--text-muted)] opacity-100 transition-opacity hover:bg-[var(--bg-elevated)] hover:text-[var(--text-primary)] sm:opacity-0 sm:group-hover:opacity-100"
         aria-label="Copy message"
       >
         {copied ? "Copied" : "Copy"}
