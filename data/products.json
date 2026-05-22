@@ -6,7 +6,7 @@
     "price": 2499.99,
     "category": "Electronics",
     "stock_status": "in_stock",
-    "image_url": "https://placehold.co/800x600?text=MacBook+Pro+16-inch"
+    "image_url": "/products/TECH-001.jpeg"
   },
   {
     "product_id": "TECH-002",
@@ -15,7 +15,7 @@
     "price": 1199.99,
     "category": "Electronics",
     "stock_status": "out_of_stock",
-    "image_url": "https://placehold.co/800x600?text=iPhone+15+Pro"
+    "image_url": "/products/TECH-002.webp"
   },
   {
     "product_id": "TECH-003",
@@ -24,7 +24,7 @@
     "price": 249.99,
     "category": "Electronics",
     "stock_status": "in_stock",
-    "image_url": "https://placehold.co/800x600?text=AirPods+Pro+2nd+Gen"
+    "image_url": "/products/TECH-003.jpeg"
   },
   {
     "product_id": "TECH-004",
@@ -33,7 +33,7 @@
     "price": 599.99,
     "category": "Electronics",
     "stock_status": "out_of_stock",
-    "image_url": "https://placehold.co/800x600?text=iPad+Air+11-inch"
+    "image_url": "/products/TECH-004.jpeg"
   },
   {
     "product_id": "TECH-005",
@@ -42,7 +42,7 @@
     "price": 399.99,
     "category": "Electronics",
     "stock_status": "in_stock",
-    "image_url": "https://placehold.co/800x600?text=Sony+WH-1000XM5+Headphones"
+    "image_url": "/products/TECH-005.jpeg"
   },
   {
     "product_id": "TECH-006",
@@ -51,7 +51,7 @@
     "price": 899.99,
     "category": "Electronics",
     "stock_status": "in_stock",
-    "image_url": "https://placehold.co/800x600?text=Samsung+65-inch+4K+Smart+TV"
+    "image_url": "/products/TECH-006.jpeg"
   },
   {
     "product_id": "TECH-007",
@@ -60,7 +60,7 @@
     "price": 1299.99,
     "category": "Electronics",
     "stock_status": "in_stock",
-    "image_url": "https://placehold.co/800x600?text=Dell+XPS+13+Laptop"
+    "image_url": "/products/TECH-007.webp"
   },
   {
     "product_id": "TECH-008",
@@ -69,7 +69,7 @@
     "price": 2499.99,
     "category": "Electronics",
     "stock_status": "low_stock",
-    "image_url": "https://placehold.co/800x600?text=Canon+EOS+R6+Camera"
+    "image_url": "/products/TECH-008.jpeg"
   },
   {
     "product_id": "TECH-009",
@@ -78,7 +78,7 @@
     "price": 99.99,
     "category": "Electronics",
     "stock_status": "in_stock",
-    "image_url": "https://placehold.co/800x600?text=Logitech+MX+Master+3S+Mouse"
+    "image_url": "/products/TECH-009.jpg"
   },
   {
     "product_id": "TECH-010",
@@ -87,7 +87,7 @@
     "price": 499.99,
     "category": "Electronics",
     "stock_status": "low_stock",
-    "image_url": "https://placehold.co/800x600?text=PlayStation+5+Console"
+    "image_url": "/products/TECH-010.jpg"
   },
   {
     "product_id": "HOME-001",
@@ -96,7 +96,7 @@
     "price": 649.99,
     "category": "Home & Kitchen",
     "stock_status": "in_stock",
-    "image_url": "https://placehold.co/800x600?text=Dyson+V15+Vacuum+Cleaner"
+    "image_url": "/products/HOME-001.jpg"
   },
   {
     "product_id": "HOME-002",
@@ -105,7 +105,7 @@
     "price": 129.99,
     "category": "Home & Kitchen",
     "stock_status": "in_stock",
-    "image_url": "https://placehold.co/800x600?text=Ninja+Air+Fryer"
+    "image_url": "/products/HOME-002.jpg"
   },
   {
     "product_id": "HOME-003",
@@ -114,7 +114,7 @@
     "price": 169.99,
     "category": "Home & Kitchen",
     "stock_status": "in_stock",
-    "image_url": "https://placehold.co/800x600?text=Keurig+K-Elite+Coffee+Maker"
+    "image_url": "/products/HOME-003.jpeg"
   },
   {
     "product_id": "HOME-004",
@@ -123,7 +123,7 @@
     "price": 799.99,
     "category": "Home & Kitchen",
     "stock_status": "out_of_stock",
-    "image_url": "https://placehold.co/800x600?text=iRobot+Roomba+j7+"
+    "image_url": "/products/HOME-004.jpg"
   },
   {
     "product_id": "HOME-005",
@@ -132,7 +132,7 @@
     "price": 99.99,
     "category": "Home & Kitchen",
     "stock_status": "in_stock",
-    "image_url": "https://placehold.co/800x600?text=Instant+Pot+Duo+7-in-1"
+    "image_url": "/products/HOME-005.jpg"
   },
   {
     "product_id": "HOME-006",
@@ -141,7 +141,7 @@
     "price": 199.99,
     "category": "Home & Kitchen",
     "stock_status": "in_stock",
-    "image_url": "https://placehold.co/800x600?text=Philips+Hue+Starter+Kit"
+    "image_url": "/products/HOME-006.jpg"
   },
   {
     "product_id": "HOME-007",
@@ -150,7 +150,7 @@
     "price": 379.99,
     "category": "Home & Kitchen",
     "stock_status": "in_stock",
-    "image_url": "https://placehold.co/800x600?text=KitchenAid+Stand+Mixer"
+    "image_url": "/products/HOME-007.jpeg"
   },
   {
     "product_id": "HOME-008",
@@ -159,7 +159,7 @@
     "price": 249.99,
     "category": "Home & Kitchen",
     "stock_status": "in_stock",
-    "image_url": "https://placehold.co/800x600?text=Nest+Learning+Thermostat"
+    "image_url": "/products/HOME-008.jpeg"
   },
   {
     "product_id": "FURN-001",
@@ -168,7 +168,7 @@
     "price": 1495.0,
     "category": "Furniture",
     "stock_status": "out_of_stock",
-    "image_url": "https://placehold.co/800x600?text=Herman+Miller+Aeron+Chair"
+    "image_url": "/products/FURN-001.jpg"
   },
   {
     "product_id": "FURN-002",
@@ -177,7 +177,7 @@
     "price": 499.99,
     "category": "Furniture",
     "stock_status": "in_stock",
-    "image_url": "https://placehold.co/800x600?text=Standing+Desk+Electric"
+    "image_url": "/products/FURN-002.jpeg"
   },
   {
     "product_id": "FURN-003",
@@ -186,7 +186,7 @@
     "price": 899.99,
     "category": "Furniture",
     "stock_status": "in_stock",
-    "image_url": "https://placehold.co/800x600?text=Modern+Sofa+3-Seater"
+    "image_url": "/products/FURN-003.jpeg"
   },
   {
     "product_id": "FURN-004",
@@ -195,7 +195,7 @@
     "price": 349.99,
     "category": "Furniture",
     "stock_status": "in_stock",
-    "image_url": "https://placehold.co/800x600?text=Queen+Size+Bed+Frame"
+    "image_url": "/products/FURN-004.jpeg"
   },
   {
     "product_id": "SPORT-001",
@@ -204,7 +204,7 @@
     "price": 2495.0,
     "category": "Sports & Fitness",
     "stock_status": "out_of_stock",
-    "image_url": "https://placehold.co/800x600?text=Peloton+Bike+"
+    "image_url": "/products/SPORT-001.jpeg"
   },
   {
     "product_id": "SPORT-002",
@@ -213,7 +213,7 @@
     "price": 399.99,
     "category": "Sports & Fitness",
     "stock_status": "in_stock",
-    "image_url": "https://placehold.co/800x600?text=Bowflex+Adjustable+Dumbbells"
+    "image_url": "/products/SPORT-002.jpeg"
   },
   {
     "product_id": "SPORT-003",
@@ -222,7 +222,7 @@
     "price": 39.99,
     "category": "Sports & Fitness",
     "stock_status": "in_stock",
-    "image_url": "https://placehold.co/800x600?text=Yoga+Mat+Premium"
+    "image_url": "/products/SPORT-003.jpeg"
   },
   {
     "product_id": "SPORT-004",
@@ -231,7 +231,7 @@
     "price": 159.99,
     "category": "Sports & Fitness",
     "stock_status": "in_stock",
-    "image_url": "https://placehold.co/800x600?text=Fitbit+Charge+6"
+    "image_url": "/products/SPORT-004.jpg"
   },
   {
     "product_id": "BOOK-001",
@@ -240,7 +240,7 @@
     "price": 149.99,
     "category": "Books & Media",
     "stock_status": "in_stock",
-    "image_url": "https://placehold.co/800x600?text=Kindle+Paperwhite"
+    "image_url": "/products/BOOK-001.jpeg"
   },
   {
     "product_id": "BOOK-002",
@@ -249,7 +249,7 @@
     "price": 179.99,
     "category": "Books & Media",
     "stock_status": "in_stock",
-    "image_url": "https://placehold.co/800x600?text=Bose+SoundLink+Speaker"
+    "image_url": "/products/BOOK-002.jpeg"
   },
   {
     "product_id": "ACCS-001",
@@ -258,7 +258,7 @@
     "price": 199.99,
     "category": "Accessories",
     "stock_status": "in_stock",
-    "image_url": "https://placehold.co/800x600?text=Samsonite+Carry-On+Luggage"
+    "image_url": "/products/ACCS-001.jpeg"
   },
   {
     "product_id": "ACCS-002",
@@ -267,7 +267,7 @@
     "price": 179.99,
     "category": "Accessories",
     "stock_status": "in_stock",
-    "image_url": "https://placehold.co/800x600?text=Ray-Ban+Aviator+Sunglasses"
+    "image_url": "/products/ACCS-002.webp"
   },
   {
     "product_id": "ACCS-003",
@@ -276,7 +276,7 @@
     "price": 89.99,
     "category": "Accessories",
     "stock_status": "in_stock",
-    "image_url": "https://placehold.co/800x600?text=Leather+Laptop+Backpack"
+    "image_url": "/products/ACCS-003.webp"
   },
   {
     "product_id": "ACCS-004",
@@ -285,7 +285,7 @@
     "price": 49.99,
     "category": "Accessories",
     "stock_status": "in_stock",
-    "image_url": "https://placehold.co/800x600?text=Anker+PowerBank+20000mAh"
+    "image_url": "/products/ACCS-004.jpg"
   },
   {
     "product_id": "GAME-001",
@@ -294,7 +294,7 @@
     "price": 349.99,
     "category": "Electronics",
     "stock_status": "in_stock",
-    "image_url": "https://placehold.co/800x600?text=Nintendo+Switch+OLED"
+    "image_url": "/products/GAME-001.jpeg"
   },
   {
     "product_id": "GAME-002",
@@ -303,7 +303,7 @@
     "price": 499.99,
     "category": "Electronics",
     "stock_status": "low_stock",
-    "image_url": "https://placehold.co/800x600?text=Xbox+Series+X"
+    "image_url": "/products/GAME-002.jpeg"
   },
   {
     "product_id": "WEAR-001",
@@ -312,6 +312,6 @@
     "price": 429.99,
     "category": "Electronics",
     "stock_status": "in_stock",
-    "image_url": "https://placehold.co/800x600?text=Apple+Watch+Series+9"
+    "image_url": "/products/WEAR-001.jpg"
   }
 ]

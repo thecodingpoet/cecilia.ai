@@ -247,8 +247,6 @@ class RAGAgent:
             )
 
         for product in structured_response.products:
-            if product.image_url:
-                continue
             catalog_item = self.product_catalog.get_product(product.product_id)
             if catalog_item:
                 product.image_url = catalog_item.get("image_url")
